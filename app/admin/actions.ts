@@ -125,14 +125,19 @@ export async function updateContractStatus(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("contracts").update({ status }).eq("id", id);
+  const { data, error } = await supabase.from("contracts").update({ status }).eq("id", id).select("id, status").single();
 
   if (error) {
     throw new Error(error.message);
   }
 
+  if (data.status !== status) {
+    throw new Error("The contract status was not saved.");
+  }
+
   await writeAudit("contract.status_updated", { id, status });
   revalidatePath("/admin");
+  redirect("/admin");
 }
 
 
@@ -214,5 +219,6 @@ export async function saveKnowledgeBaseItem(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/about");
 }
+
 
 
