@@ -4,31 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "4ac99c8c91725e7b",
+        "id": "057698209930aeda",
         "type": "tabs",
         "children": [
           {
-            "id": "10691b4d37728d5a",
+            "id": "7e367d46e13ea0f7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Active Directory/monthly-admin.md.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "monthly-admin.md"
+              "title": "New tab"
             }
           }
         ]
@@ -109,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Active Directory/monthly-admin.md.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +113,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Active Directory/monthly-admin.md.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
@@ -171,7 +155,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Active Directory/monthly-admin.md.md",
                 "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
@@ -185,7 +168,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 217.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -199,10 +183,20 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "10691b4d37728d5a",
+  "active": "7e367d46e13ea0f7",
   "lastOpenFiles": [
-    "Active Directory/admin-access-levels.md.md",
+    "Automation/email-workflows.md.md",
+    "Automation/api.md.md",
+    "Automation/updating-scripts.md.md",
+    "Automation/script-errors.md.md",
+    "Automation/handover-docs.md.md",
+    "Automation/preparing-data.md.md",
+    "Automation/connecting-systems-securely.md.md",
+    "Automation/data-formatting-parsing.md.md",
+    "Automation/simple-multi-step-workflows.md.md",
     "Active Directory/monthly-admin.md.md",
+    "Automation/identifying-tasks.md.md",
+    "Active Directory/admin-access-levels.md.md",
     "Active Directory/login-issues.md.md",
     "Active Directory/permissions-review.md.md",
     "Active Directory/password-policy.md.md",
@@ -217,16 +211,6 @@
     "Tech/about.md.md",
     "Contracts/about.md.md",
     "Billing/about.md.md",
-    "Billing/Fixed Pricing.md",
-    "Billing/Hidden Fees.md",
-    "Meetings and Webinars/about.md.md",
-    "Meetings and Webinars/basic-meeting-support-cost.md.md",
-    "Meetings and Webinars/branded-registration-page.md.md",
-    "Meetings and Webinars/full-webinar-hosting-support-cost.md.md",
-    "Meetings and Webinars/guest-speaker-preparation.md.md",
-    "Meetings and Webinars/Meeting Technical Issues.md",
-    "Meetings and Webinars/meeting-software-license.md.md",
-    "Meetings and Webinars/post-session-support.md.md",
     "temps",
     "Other",
     "Tech",
