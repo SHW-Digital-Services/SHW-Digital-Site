@@ -224,7 +224,8 @@ textarea {
 
 .kb-article h1,
 .kb-article h2,
-.kb-article h3 {
+.kb-article h3,
+.kb-article h4 {
   color: #f5efff;
   line-height: 1.15;
   margin: 1.8em 0 0.65em;
@@ -234,20 +235,73 @@ textarea {
   font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
+.kb-article h3 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
 .kb-article h1:first-child,
 .kb-article h2:first-child,
-.kb-article h3:first-child {
+.kb-article h3:first-child,
+.kb-article h4:first-child {
   margin-top: 0;
 }
 
 .kb-article p,
 .kb-article ul,
-.kb-article ol {
+.kb-article ol,
+.kb-article blockquote,
+.kb-article pre,
+.kb-article table {
   margin: 0 0 1.1em;
+}
+
+.kb-article ul,
+.kb-article ol {
+  padding-left: 1.45rem;
+}
+
+.kb-article ul {
+  list-style: disc;
+}
+
+.kb-article ol {
+  list-style: decimal;
+}
+
+.kb-article li {
+  margin: 0.45em 0;
+  padding-left: 0.2rem;
+}
+
+.kb-article li > p {
+  margin: 0.35em 0;
+}
+
+.kb-article strong {
+  color: #f5efff;
+  font-weight: 800;
+}
+
+.kb-article em {
+  color: #f3e8ff;
 }
 
 .kb-article a {
   color: #fde68a;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.kb-article blockquote {
+  border-left: 3px solid #fde68a;
+  color: #d8b4fe;
+  padding: 0.1rem 0 0.1rem 1rem;
+}
+
+.kb-article hr {
+  border: 0;
+  border-top: 1px solid rgba(234, 179, 8, 0.35);
+  margin: 2rem 0;
 }
 
 .kb-article code {
@@ -255,5 +309,38 @@ textarea {
   border: 1px solid rgba(234, 179, 8, 0.25);
   border-radius: 6px;
   padding: 0.12em 0.35em;
+}
+
+.kb-article pre {
+  background: rgba(7, 4, 17, 0.72);
+  border: 1px solid rgba(234, 179, 8, 0.25);
+  border-radius: 10px;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+.kb-article pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.kb-article table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.kb-article th,
+.kb-article td {
+  border: 1px solid rgba(234, 179, 8, 0.28);
+  padding: 0.7rem 0.85rem;
+  text-align: left;
+}
+
+.kb-article th {
+  background: rgba(234, 179, 8, 0.12);
+  color: #f5efff;
 }
 
