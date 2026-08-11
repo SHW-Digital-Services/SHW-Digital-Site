@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Check, CreditCard, LogOut, Mail, Plus, Settings } from "lucide-react";
+import { Check, CreditCard, LogOut, Mail, Plus, Send, Settings } from "lucide-react";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { ClientContractsZipButton, ContractPdfButton, type ContractForDownload } from "./ContractDownloads";
-import { createContract, createPaymentRecord, markClientMessageRead, saveKnowledgeBaseItem, signOutAdmin, updateContractStatus } from "./actions";
+import { createContract, createPaymentRecord, markClientMessageRead, saveKnowledgeBaseItem, sendAdminMessage, signOutAdmin, updateContractStatus } from "./actions";
 import styles from "./admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,7 @@ type ContractRecord = ContractForDownload & {
 type ClientMessage = {
   id: number;
   client_email: string;
+  direction: string | null;
   message: string;
   status: string;
   subject: string;
@@ -92,7 +93,7 @@ export default async function AdminDashboard() {
       .from("contracts")
       .select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at")
       .order("created_at", { ascending: false }),
-    supabase.from("client_messages").select("id, client_email, subject, message, status, created_at").order("created_at", { ascending: false }).limit(12),
+    supabase.from("client_messages").select("id, client_email, subject, message, status, direction, created_at").order("created_at", { ascending: false }).limit(12),
     supabase.from("audit_logs").select("id, action, details, created_at").order("created_at", { ascending: false }).limit(16),
     supabase.from("knowledge_base").select("id, category, title, content, published").order("updated_at", { ascending: false }),
   ]);
@@ -102,7 +103,7 @@ export default async function AdminDashboard() {
     contract_payload: typeof contract.contract_payload === "object" && contract.contract_payload !== null ? contract.contract_payload : {},
   })) as ContractRecord[];
   const groupedContracts = groupByClient(contracts);
-  const unreadMessages = ((messages ?? []) as ClientMessage[]).filter((message) => message.status === "new").length;
+  const unreadMessages = ((messages ?? []) as ClientMessage[]).filter((message) => message.status === "new" && message.direction !== "admin_to_client").length;
   const integrations = [
     { name: "Mailchimp", connected: integrationStatus(["MAILCHIMP_API_KEY", "MAILCHIMP_SERVER_PREFIX", "MAILCHIMP_AUDIENCE_ID"]), detail: "Audience and campaign automation settings." },
     { name: "Stripe", connected: integrationStatus(["STRIPE_SECRET_KEY"]), detail: "Payment links or Checkout can power client portal payments." },
@@ -278,17 +279,40 @@ export default async function AdminDashboard() {
                 <h2>Message notifications</h2>
                 <span className={styles.badge}>{unreadMessages} new</span>
               </div>
+
+              <form action={sendAdminMessage} className={styles.panelNested}>
+                <h3>Create message</h3>
+                <div className={styles.formGrid}>
+                  <label className={styles.field}>
+                    <span>Client email</span>
+                    <input name="clientEmail" type="email" required />
+                  </label>
+                  <label className={styles.field}>
+                    <span>Subject</span>
+                    <input name="subject" required />
+                  </label>
+                  <label className={styles.field}>
+                    <span>Message</span>
+                    <textarea name="message" required />
+                  </label>
+                  <button className={styles.primaryButton} type="submit">
+                    <Send size={17} aria-hidden="true" />
+                    Send to client
+                  </button>
+                </div>
+              </form>
               <div className={styles.list}>
                 {((messages ?? []) as ClientMessage[]).map((message) => (
                   <article className={styles.item} key={message.id}>
                     <div className={styles.clientHeader}>
                       <h3>{message.subject}</h3>
-                      <span className={styles.badge}>{message.status}</span>
+                      <span className={styles.badge}>{message.direction === "admin_to_client" ? "admin" : message.status}</span>
                     </div>
                     <p>{message.client_email}</p>
+                    <p>{message.direction === "admin_to_client" ? "Sent to client" : "From client"}</p>
                     <p>{message.message}</p>
                     <p className={styles.meta}>{dateValue(message.created_at)}</p>
-                    {message.status === "new" ? (
+                    {message.status === "new" && message.direction !== "admin_to_client" ? (
                       <form action={markClientMessageRead}>
                         <input name="id" type="hidden" value={message.id} />
                         <button className={styles.secondaryButton} type="submit">
@@ -297,6 +321,19 @@ export default async function AdminDashboard() {
                         </button>
                       </form>
                     ) : null}
+                    <form action={sendAdminMessage} className={styles.replyForm}>
+                      <input name="clientEmail" type="hidden" value={message.client_email} />
+                      <input name="parentMessageId" type="hidden" value={message.id} />
+                      <input name="subject" type="hidden" value={message.subject.startsWith("Re:") ? message.subject : `Re: ${message.subject}`} />
+                      <label className={styles.field}>
+                        <span>Reply</span>
+                        <textarea name="message" required />
+                      </label>
+                      <button className={styles.secondaryButton} type="submit">
+                        <Send size={17} aria-hidden="true" />
+                        Reply
+                      </button>
+                    </form>
                   </article>
                 ))}
                 {!(messages ?? []).length ? <p className={styles.empty}>No client messages yet.</p> : null}
@@ -371,6 +408,7 @@ export default async function AdminDashboard() {
             </section>
             <section className={styles.panel}>
               <h2>Audit log</h2>
+
               <div className={styles.list}>
                 {((auditLogs ?? []) as AuditLog[]).map((log) => (
                   <article className={styles.item} key={log.id}>
@@ -390,4 +428,6 @@ export default async function AdminDashboard() {
     </main>
   );
 }
+
+
 

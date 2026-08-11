@@ -297,3 +297,22 @@
   height: 18px;
   width: 18px;
 }
+
+.panelNested,
+.replyForm {
+  background: #fbf6ee;
+  border: 1px solid #e0d4c2;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  margin: 14px 0;
+  padding: 14px;
+}
+
+.panelNested h3 {
+  margin: 0;
+}
+
+.replyForm textarea {
+  min-height: 72px;
+}

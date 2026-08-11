@@ -79,6 +79,7 @@ export async function sendClientMessage(formData: FormData) {
 
   const { error } = await supabase.from("client_messages").insert({
     client_email: user.email,
+    direction: "client_to_admin",
     message,
     subject,
     user_id: user.id,
@@ -120,3 +121,4 @@ export async function updateClientProfile(formData: FormData) {
 
   revalidatePath("/client-portal");
 }
+

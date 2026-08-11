@@ -222,3 +222,32 @@ export async function saveKnowledgeBaseItem(formData: FormData) {
 
 
 
+
+export async function sendAdminMessage(formData: FormData) {
+  const clientEmail = textValue(formData, "clientEmail");
+  const subject = textValue(formData, "subject");
+  const message = textValue(formData, "message");
+  const parentMessageId = optionalNumber(formData, "parentMessageId");
+
+  if (!clientEmail || !subject || !message) {
+    throw new Error("Client email, subject, and message are required.");
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("client_messages").insert({
+    client_email: clientEmail,
+    direction: "admin_to_client",
+    message,
+    parent_message_id: parentMessageId,
+    status: "sent",
+    subject,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("client_message.sent_by_admin", { clientEmail, parentMessageId, subject });
+  revalidatePath("/admin");
+  revalidatePath("/client-portal");
+}

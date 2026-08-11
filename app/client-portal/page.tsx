@@ -30,6 +30,8 @@ type PaymentRecord = {
 
 type MessageRecord = {
   id: number;
+  client_email: string;
+  direction: string | null;
   subject: string;
   message: string;
   status: string;
@@ -86,7 +88,7 @@ export default async function ClientPortalPage() {
     supabase.from("profiles").select("contact_name, business_name, phone, address_line_1, address_line_2, city, postcode").eq("id", user.id).maybeSingle(),
     supabase.from("contracts").select("id, service_type, client_name, contract_value, deposit_percent, status, created_at").eq("client_email", user.email).order("created_at", { ascending: false }),
     supabase.from("contract_payments").select("id, amount, due_date, paid_at, payment_status, payment_type, payment_url").eq("client_email", user.email).order("created_at", { ascending: false }),
-    supabase.from("client_messages").select("id, subject, message, status, created_at").eq("user_id", user.id).order("created_at", { ascending: false }),
+    supabase.from("client_messages").select("id, client_email, direction, subject, message, status, created_at").eq("client_email", user.email).order("created_at", { ascending: false }),
   ]);
 
   return (
@@ -214,7 +216,7 @@ export default async function ClientPortalPage() {
                   <article className={styles.item} key={message.id}>
                     <div className={styles.cardHeader}>
                       <h3>{message.subject}</h3>
-                      <span className={styles.meta}>{message.status}</span>
+                      <span className={styles.meta}>{message.direction === "admin_to_client" ? "From admin" : message.status}</span>
                     </div>
                     <p>{message.message}</p>
                     <p>{dateValue(message.created_at)}</p>
@@ -229,6 +231,7 @@ export default async function ClientPortalPage() {
     </main>
   );
 }
+
 
 
 
