@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Scale, Settings } from "lucide-react";
 import CookieConsent from "./CookieConsent";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           <Settings size={17} strokeWidth={1.9} aria-hidden="true" />
         </Link>
+        <Analytics />
       </body>
     </html>
   );
