@@ -4,54 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "cd1a2c8c7aa8ade4",
+        "id": "08220cbb33cbf3d4",
         "type": "tabs",
         "children": [
           {
-            "id": "3f15e61b181d5d43",
-            "type": "leaf",
-            "state": {
-              "type": "localgraph",
-              "state": {
-                "file": "Meetings and Webinars/about.md.md",
-                "options": {
-                  "collapse-filter": true,
-                  "search": "",
-                  "localJumps": 1,
-                  "localBacklinks": true,
-                  "localForelinks": true,
-                  "localInterlinks": false,
-                  "showTags": false,
-                  "showAttachments": false,
-                  "hideUnresolved": false,
-                  "collapse-color-groups": true,
-                  "colorGroups": [],
-                  "collapse-display": true,
-                  "showArrow": false,
-                  "textFadeMultiplier": 0,
-                  "nodeSizeMultiplier": 1,
-                  "lineSizeMultiplier": 1,
-                  "collapse-forces": true,
-                  "centerStrength": 0.518713248970312,
-                  "repelStrength": 10,
-                  "linkStrength": 1,
-                  "linkDistance": 250,
-                  "scale": 1,
-                  "close": true
-                }
-              },
-              "icon": "lucide-git-fork",
-              "title": "Local graph"
-            }
-          },
-          {
-            "id": "8f6f61ef7e4f5500",
+            "id": "02f9bc3bdcbcbcd5",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Meetings and Webinars/about.md.md",
-                "mode": "preview",
+                "file": "Active Directory/about.md.md",
+                "mode": "source",
                 "source": false,
                 "backlinks": true,
                 "backlinkOpts": {
@@ -68,8 +31,7 @@
               "title": "about.md"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -147,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Meetings and Webinars/about.md.md",
+                "file": "Active Directory/about.md.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -166,9 +128,9 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Meetings and Webinars/about.md.md",
-                "linksCollapsed": false,
-                "unlinkedCollapsed": false
+                "file": "Active Directory/about.md.md",
+                "linksCollapsed": true,
+                "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
               "title": "Outgoing links"
@@ -209,7 +171,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Meetings and Webinars/about.md.md",
+                "file": "Active Directory/about.md.md",
                 "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
@@ -237,8 +199,17 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "8f6f61ef7e4f5500",
+  "active": "02f9bc3bdcbcbcd5",
   "lastOpenFiles": [
+    "Automation/about.md.md",
+    "Active Directory/about.md.md",
+    "Website Development and Maintenance/about.md.md",
+    "Tech/about.md.md",
+    "Contracts/about.md.md",
+    "Billing/about.md.md",
+    "Billing/Fixed Pricing.md",
+    "Billing/Hidden Fees.md",
+    "Meetings and Webinars/about.md.md",
     "Meetings and Webinars/basic-meeting-support-cost.md.md",
     "Meetings and Webinars/branded-registration-page.md.md",
     "Meetings and Webinars/full-webinar-hosting-support-cost.md.md",
@@ -250,12 +221,9 @@
     "Meetings and Webinars/recordings.md.md",
     "Meetings and Webinars/service-for-small-teams.md.md",
     "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
-    "Meetings and Webinars/about.md.md",
     "temps/KB Page Template (Short Title).md",
     "Other/Booking a Service.md",
-    "Billing/Hidden Fees.md",
     "Contracts/Tailored Service.md",
-    "Billing/Fixed Pricing.md",
     "Meetings and Webinars/Meeting and webinar service.md",
     "Meetings and Webinars/Basic Support Cost.md",
     "temps",
@@ -267,7 +235,6 @@
     "Meetings and Webinars",
     "Active Directory",
     "Automation",
-    "Website Development and Maintenance",
-    "Welcome.md"
+    "Website Development and Maintenance"
   ]
 }

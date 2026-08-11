@@ -1,5 +1,5 @@
 ---
-title: About the Meeting and webinar Service
+title: Meeting and Webinar Service
 date: 2026-08-11
 published: true
 category: Meetings and Webinars
