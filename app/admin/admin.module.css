@@ -342,3 +342,20 @@
   touch-action: none;
   width: 100%;
 }
+
+.miniForm {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.miniForm input,
+.miniForm select {
+  background: #ffffff;
+  border: 1px solid #cbbfac;
+  border-radius: 6px;
+  color: #17201c;
+  font: inherit;
+  padding: 9px 10px;
+  width: 100%;
+}

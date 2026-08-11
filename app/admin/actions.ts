@@ -273,3 +273,90 @@ export async function signShwContract(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/client-portal");
 }
+
+async function requireAdmin() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    redirect("/admin/login");
+  }
+
+  const { data: profile } = await supabase.from("profiles").select("is_admin").eq("id", user.id).maybeSingle();
+
+  if (!profile?.is_admin) {
+    redirect("/admin/unauthorised");
+  }
+
+  return { supabase, user };
+}
+
+export async function createProjectMilestone(formData: FormData) {
+  const contractId = optionalNumber(formData, "contractId");
+  const title = textValue(formData, "title");
+  const dueDate = textValue(formData, "dueDate");
+
+  if (!contractId || !title) {
+    throw new Error("Contract and milestone title are required.");
+  }
+
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("project_milestones").insert({
+    contract_id: contractId,
+    due_date: dueDate || null,
+    status: "pending",
+    title,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("project_milestone.created", { contractId, title });
+  revalidatePath("/admin");
+  revalidatePath("/client-portal");
+}
+
+export async function updateProjectMilestoneStatus(formData: FormData) {
+  const id = optionalNumber(formData, "id");
+  const status = textValue(formData, "status");
+  const allowedStatuses = new Set(["pending", "active", "complete"]);
+
+  if (!id || !allowedStatuses.has(status)) {
+    throw new Error("A valid milestone and status are required.");
+  }
+
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("project_milestones").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("project_milestone.status_updated", { id, status });
+  revalidatePath("/admin");
+  revalidatePath("/client-portal");
+}
+
+export async function updateSupportTicketStatus(formData: FormData) {
+  const id = optionalNumber(formData, "id");
+  const status = textValue(formData, "status");
+  const allowedStatuses = new Set(["new", "in_progress", "waiting_client", "resolved"]);
+
+  if (!id || !allowedStatuses.has(status)) {
+    throw new Error("A valid ticket and status are required.");
+  }
+
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("support_tickets").update({ status, updated_at: new Date().toISOString() }).eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("support_ticket.status_updated", { id, status });
+  revalidatePath("/admin");
+  revalidatePath("/client-portal");
+}

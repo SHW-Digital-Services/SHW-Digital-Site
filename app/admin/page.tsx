@@ -3,7 +3,7 @@ import { Check, CreditCard, LogOut, Mail, Plus, Send, Settings } from "lucide-re
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { ClientContractsZipButton, ContractPdfButton, type ContractForDownload } from "./ContractDownloads";
-import { createContract, createPaymentRecord, markClientMessageRead, sendAdminMessage, signOutAdmin, updateContractStatus } from "./actions";
+import { createContract, createPaymentRecord, createProjectMilestone, markClientMessageRead, sendAdminMessage, signOutAdmin, updateContractStatus, updateProjectMilestoneStatus, updateSupportTicketStatus } from "./actions";
 import ShwSignatureForm from "./ShwSignatureForm";
 import BrandLogo from "../BrandLogo";
 import styles from "./admin.module.css";
@@ -29,6 +29,49 @@ type AuditLog = {
   action: string;
   details: Record<string, unknown>;
   created_at: string;
+};
+
+type SupportTicket = {
+  client_email: string;
+  created_at: string;
+  details: string;
+  id: number;
+  priority: string;
+  status: string;
+  subject: string;
+  ticket_type: string;
+};
+
+type ClientFile = {
+  client_email: string;
+  created_at: string;
+  file_name: string;
+  file_size: number;
+  id: number;
+  note: string | null;
+};
+
+type Milestone = {
+  contract_id: number;
+  due_date: string | null;
+  id: number;
+  status: string;
+  title: string;
+};
+
+type ScopeComment = {
+  client_email: string;
+  comment: string;
+  contract_id: number;
+  created_at: string;
+  id: number;
+};
+
+type ScopeApproval = {
+  approved_at: string;
+  client_email: string;
+  contract_id: number;
+  id: number;
 };
 
 
@@ -82,13 +125,18 @@ export default async function AdminDashboard() {
     redirect("/admin/unauthorised");
   }
 
-  const [{ data, error }, { data: messages }, { data: auditLogs }] = await Promise.all([
+  const [{ data, error }, { data: messages }, { data: auditLogs }, { data: tickets }, { data: files }, { data: milestones }, { data: comments }, { data: approvals }] = await Promise.all([
     supabase
       .from("contracts")
       .select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at, contract_signatures(role, signer_name, signer_email, signature_data_url, signed_at)")
       .order("created_at", { ascending: false }),
     supabase.from("client_messages").select("id, client_email, subject, message, status, direction, created_at").order("created_at", { ascending: false }).limit(12),
     supabase.from("audit_logs").select("id, action, details, created_at").order("created_at", { ascending: false }).limit(16),
+    supabase.from("support_tickets").select("id, client_email, subject, details, priority, status, ticket_type, created_at").order("created_at", { ascending: false }).limit(16),
+    supabase.from("client_files").select("id, client_email, file_name, file_size, note, created_at").order("created_at", { ascending: false }).limit(16),
+    supabase.from("project_milestones").select("id, contract_id, title, status, due_date").order("created_at", { ascending: true }),
+    supabase.from("scope_comments").select("id, contract_id, client_email, comment, created_at").order("created_at", { ascending: false }).limit(16),
+    supabase.from("scope_approvals").select("id, contract_id, client_email, approved_at").order("approved_at", { ascending: false }).limit(16),
   ]);
 
   const contracts = (data ?? []).map((contract) => ({
@@ -262,6 +310,28 @@ export default async function AdminDashboard() {
                                 <span className={contract.contract_signatures?.some((signature) => signature.role === "client") ? styles.connected : styles.notConnected}>Client</span>
                                 <span className={contract.contract_signatures?.some((signature) => signature.role === "shw") ? styles.connected : styles.notConnected}>SHW</span>
                               </div>
+                              <form action={createProjectMilestone} className={styles.miniForm}>
+                                <input name="contractId" type="hidden" value={contract.id} />
+                                <input name="title" placeholder="Milestone title" required />
+                                <input name="dueDate" type="date" />
+                                <button className={styles.secondaryButton} type="submit">Add milestone</button>
+                              </form>
+                              <div className={styles.list}>
+                                {((milestones ?? []) as Milestone[]).filter((milestone) => milestone.contract_id === contract.id).map((milestone) => (
+                                  <form action={updateProjectMilestoneStatus} className={styles.statusForm} key={milestone.id}>
+                                    <input name="id" type="hidden" value={milestone.id} />
+                                    <span>{milestone.title}</span>
+                                    <select name="status" defaultValue={milestone.status} aria-label="Milestone status">
+                                      <option value="pending">Pending</option>
+                                      <option value="active">Active</option>
+                                      <option value="complete">Complete</option>
+                                    </select>
+                                    <button className={styles.iconButton} type="submit" title="Save milestone" aria-label="Save milestone">
+                                      <Check size={16} aria-hidden="true" />
+                                    </button>
+                                  </form>
+                                ))}
+                              </div>
                               <ShwSignatureForm contract={contract} signerName={user.email ?? "SHW Digital Services"} />
                             </td>
                           </tr>
@@ -336,6 +406,76 @@ export default async function AdminDashboard() {
                   </article>
                 ))}
                 {!(messages ?? []).length ? <p className={styles.empty}>No client messages yet.</p> : null}
+              </div>
+            </section>
+
+            <section className={styles.panel}>
+              <h2>Support tickets</h2>
+              <div className={styles.list}>
+                {((tickets ?? []) as SupportTicket[]).map((ticket) => (
+                  <article className={styles.item} key={ticket.id}>
+                    <div className={styles.clientHeader}>
+                      <h3>{ticket.subject}</h3>
+                      <span className={styles.badge}>{ticket.priority}</span>
+                    </div>
+                    <p>{ticket.client_email}</p>
+                    <p>{ticket.details}</p>
+                    <form action={updateSupportTicketStatus} className={styles.statusForm}>
+                      <input name="id" type="hidden" value={ticket.id} />
+                      <select name="status" defaultValue={ticket.status} aria-label="Ticket status">
+                        <option value="new">New</option>
+                        <option value="in_progress">In progress</option>
+                        <option value="waiting_client">Waiting client</option>
+                        <option value="resolved">Resolved</option>
+                      </select>
+                      <button className={styles.iconButton} type="submit" title="Save ticket status" aria-label="Save ticket status">
+                        <Check size={16} aria-hidden="true" />
+                      </button>
+                    </form>
+                  </article>
+                ))}
+                {!(tickets ?? []).length ? <p className={styles.empty}>No support tickets yet.</p> : null}
+              </div>
+            </section>
+
+            <section className={styles.panel}>
+              <h2>Client files and scope comments</h2>
+              <div className={styles.list}>
+                {((files ?? []) as ClientFile[]).map((file) => (
+                  <article className={styles.item} key={file.id}>
+                    <div className={styles.clientHeader}>
+                      <h3>{file.file_name}</h3>
+                      <span className={styles.badge}>{Math.max(1, Math.round(file.file_size / 1024))} KB</span>
+                    </div>
+                    <p>{file.client_email}</p>
+                    {file.note ? <p>{file.note}</p> : null}
+                    <p className={styles.meta}>{dateValue(file.created_at)}</p>
+                  </article>
+                ))}
+                {!(files ?? []).length ? <p className={styles.empty}>No client files uploaded yet.</p> : null}
+              </div>
+              <div className={styles.list}>
+                {((approvals ?? []) as ScopeApproval[]).map((approval) => (
+                  <article className={styles.item} key={approval.id}>
+                    <div className={styles.clientHeader}>
+                      <h3>Approved contract {approval.contract_id}</h3>
+                      <span className={styles.connected}>Approved</span>
+                    </div>
+                    <p>{approval.client_email}</p>
+                    <p className={styles.meta}>{dateValue(approval.approved_at)}</p>
+                  </article>
+                ))}
+                {((comments ?? []) as ScopeComment[]).map((comment) => (
+                  <article className={styles.item} key={comment.id}>
+                    <div className={styles.clientHeader}>
+                      <h3>Contract {comment.contract_id}</h3>
+                      <span className={styles.meta}>{dateValue(comment.created_at)}</span>
+                    </div>
+                    <p>{comment.client_email}</p>
+                    <p>{comment.comment}</p>
+                  </article>
+                ))}
+                {!(comments ?? []).length ? <p className={styles.empty}>No scope comments yet.</p> : null}
               </div>
             </section>
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { LogIn, UserPlus } from "lucide-react";
-import { createClientAccount, signInClient, type PortalActionState } from "./actions";
+import { KeyRound, LogIn, UserPlus } from "lucide-react";
+import { createClientAccount, requestPasswordReset, signInClient, type PortalActionState } from "./actions";
 import styles from "./portal.module.css";
 
 const initialState: PortalActionState = { message: "", ok: false };
@@ -10,6 +10,7 @@ const initialState: PortalActionState = { message: "", ok: false };
 export default function PortalAuthForms() {
   const [signInState, signInAction, signInPending] = useActionState(signInClient, initialState);
   const [createState, createAction, createPending] = useActionState(createClientAccount, initialState);
+  const [resetState, resetAction, resetPending] = useActionState(requestPasswordReset, initialState);
 
   return (
     <div className={styles.authGrid}>
@@ -44,6 +45,19 @@ export default function PortalAuthForms() {
         <button className={styles.primaryButton} disabled={createPending} type="submit">
           <UserPlus size={18} aria-hidden="true" />
           {createPending ? "Creating" : "Create account"}
+        </button>
+      </form>
+
+      <form action={resetAction} className={styles.panel}>
+        <h2>Reset password</h2>
+        <label className={styles.field}>
+          <span>Email</span>
+          <input name="email" type="email" autoComplete="email" required />
+        </label>
+        {resetState.message ? <p className={resetState.ok ? styles.success : styles.error}>{resetState.message}</p> : null}
+        <button className={styles.primaryButton} disabled={resetPending} type="submit">
+          <KeyRound size={18} aria-hidden="true" />
+          {resetPending ? "Sending" : "Forgot password?"}
         </button>
       </form>
     </div>

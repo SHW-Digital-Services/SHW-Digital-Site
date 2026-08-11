@@ -108,6 +108,7 @@
 }
 
 .field input,
+.field select,
 .field textarea {
   background: #ffffff;
   border: 1px solid #bdd0bb;
@@ -244,6 +245,66 @@
   font-size: 12px;
   font-weight: 800;
   padding: 6px 10px;
+}
+
+.checkboxGroup {
+  display: grid;
+  gap: 8px;
+}
+
+.checkboxGroup label {
+  align-items: center;
+  display: flex;
+  font-weight: 800;
+  gap: 10px;
+}
+
+.checkboxGroup input {
+  height: 18px;
+  width: 18px;
+}
+
+.scopePanel {
+  border-top: 1px solid #d6e4d3;
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+.scopePanel h4 {
+  margin: 0;
+}
+
+.inlineForm {
+  display: grid;
+  gap: 10px;
+}
+
+.noteLine {
+  border-left: 3px solid #bdd0bb;
+  padding-left: 10px;
+}
+
+.milestoneList {
+  display: grid;
+  gap: 10px;
+}
+
+.milestone {
+  align-items: center;
+  border: 1px solid #d6e4d3;
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding: 10px;
+}
+
+@media (max-width: 640px) {
+  .milestone {
+    grid-template-columns: 1fr;
+  }
 }
 
 .signedBadge {

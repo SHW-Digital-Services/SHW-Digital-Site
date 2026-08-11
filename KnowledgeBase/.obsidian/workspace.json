@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "3a501af77ef536cf",
+        "id": "68f043b434328b5d",
         "type": "tabs",
         "children": [
           {
-            "id": "87fb1e5b63281b1e",
+            "id": "4779e7000831b6f0",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -183,8 +183,18 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "87fb1e5b63281b1e",
+  "active": "4779e7000831b6f0",
   "lastOpenFiles": [
+    "Client Portal/client-portal-security.md.md",
+    "Client Portal/adding-team-members.md.md",
+    "Client Portal/comms-prefs.md.md",
+    "Client Portal/uploading-files-assets-securely.md.md",
+    "Client Portal/track-milestones-progress.md.md",
+    "Client Portal/support-tickets.md.md",
+    "Client Portal/download-invoice-receipts.md.md",
+    "Client Portal/view-approve-project-scopes.md.md",
+    "Client Portal/password-reset.md.md",
+    "Client Portal/client-portal-first-time-access.md.md",
     "Client Portal/about.md.md",
     "Billing/about.md.md",
     "Meetings and Webinars/about.md.md",
@@ -202,16 +212,6 @@
     "Automation/identifying-tasks.md.md",
     "Active Directory/admin-access-levels.md.md",
     "Active Directory/login-issues.md.md",
-    "Active Directory/permissions-review.md.md",
-    "Active Directory/password-policy.md.md",
-    "Active Directory/gpo.md.md",
-    "Active Directory/device-policy.md.md",
-    "Active Directory/offboarding-users.md.md",
-    "Active Directory/new-user.md.md",
-    "Active Directory/setup-process.md.md",
-    "Active Directory/about.md.md",
-    "Automation/about.md.md",
-    "Website Development and Maintenance/about.md.md",
     "temps",
     "Other",
     "Tech",

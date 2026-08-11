@@ -8,3 +8,12 @@
 ✓ Ready in 2.2s
 ✓ Running next.config.ts took 7.2s
 
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.171:3000
+✓ Ready in 1681ms
+✓ Running next.config.ts took 537ms
+○ Compiling proxy ...
+- Experiments (use with caution):
+  · serverActions
+
