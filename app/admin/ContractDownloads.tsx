@@ -1,93 +1,10 @@
 "use client";
 
 import { Archive, FileDown } from "lucide-react";
-import { jsPDF } from "jspdf";
+import { createContractPdf, fileSafe, type ContractForPdf } from "@/lib/contracts/pdf";
 import styles from "./admin.module.css";
 
-export type ContractForDownload = {
-  client_business: string | null;
-  client_email: string | null;
-  client_name: string;
-  contract_payload: {
-    deliverables?: string;
-    paymentTerms?: string;
-    producedBy?: string;
-    scope?: string;
-    timeline?: string;
-  };
-  contract_value: number | null;
-  deposit_percent: number;
-  id: number;
-  service_type: string;
-  status: string;
-};
-
-function currency(value: number | null) {
-  if (value === null) return "To be agreed";
-  return new Intl.NumberFormat("en-GB", { currency: "GBP", style: "currency" }).format(value);
-}
-
-function fileSafe(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "client";
-}
-
-function createContractPdf(contract: ContractForDownload) {
-  const doc = new jsPDF({ unit: "pt", format: "a4" });
-  const left = 56;
-  let y = 64;
-
-  const writeHeading = (text: string) => {
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text(text, left, y);
-    y += 20;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-  };
-
-  const writeBody = (text: string) => {
-    const lines = doc.splitTextToSize(text || "To be confirmed.", 480);
-    doc.text(lines, left, y);
-    y += lines.length * 13 + 18;
-  };
-
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.text("SHW Digital Services", left, y);
-  y += 28;
-  doc.setFontSize(15);
-  doc.text(`Contract ${contract.id}: ${contract.service_type}`, left, y);
-  y += 34;
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  writeBody(
-    [
-      `Client: ${contract.client_name}`,
-      contract.client_business ? `Business: ${contract.client_business}` : "",
-      contract.client_email ? `Email: ${contract.client_email}` : "",
-      `Value: ${currency(contract.contract_value)}`,
-      `Deposit: ${contract.deposit_percent}%`,
-      `Status: ${contract.status}`,
-    ]
-      .filter(Boolean)
-      .join("\n"),
-  );
-
-  writeHeading("Scope");
-  writeBody(contract.contract_payload.scope || "");
-  writeHeading("Deliverables");
-  writeBody(contract.contract_payload.deliverables || "");
-  writeHeading("Timeline");
-  writeBody(contract.contract_payload.timeline || "");
-  writeHeading("Payment Terms");
-  writeBody(contract.contract_payload.paymentTerms || "");
-
-  doc.setFontSize(9);
-  doc.setTextColor(90);
-  doc.text("Produced by SHW Digital Services Contract Centre.", left, 790);
-  return doc;
-}
+export type ContractForDownload = ContractForPdf;
 
 function crc32(data: Uint8Array) {
   let crc = -1;
@@ -217,5 +134,3 @@ export function ClientContractsZipButton({ clientName, contracts }: { clientName
     </button>
   );
 }
-
-

@@ -204,3 +204,54 @@
     flex-direction: column;
   }
 }
+
+.contractTools,
+.signatureForm {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.buttonRow,
+.signatureForm > div,
+.signatureGrid {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.signatureGrid {
+  align-items: flex-start;
+}
+
+.signaturePad {
+  background: #ffffff;
+  border: 1px dashed #9fb79d;
+  border-radius: 8px;
+  display: block;
+  max-width: 100%;
+  min-height: 112px;
+  object-fit: contain;
+  touch-action: none;
+  width: 100%;
+}
+
+.signedBadge,
+.pendingBadge {
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 10px;
+}
+
+.signedBadge {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pendingBadge {
+  background: #fef3c7;
+  color: #92400e;
+}

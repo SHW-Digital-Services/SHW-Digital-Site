@@ -220,3 +220,56 @@ export async function sendAdminMessage(formData: FormData) {
   revalidatePath("/client-portal");
 }
 
+
+export async function signShwContract(formData: FormData) {
+  const contractId = Number(textValue(formData, "contractId"));
+  const signerName = textValue(formData, "signerName");
+  const signatureDataUrl = textValue(formData, "signatureDataUrl");
+
+  if (!Number.isFinite(contractId) || !signerName || !signatureDataUrl.startsWith("data:image/")) {
+    throw new Error("A valid contract, signer name, and signature are required.");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    redirect("/admin/login");
+  }
+
+  const { data: profile } = await supabase.from("profiles").select("is_admin").eq("id", user.id).maybeSingle();
+
+  if (!profile?.is_admin) {
+    redirect("/admin/unauthorised");
+  }
+
+  const { error } = await supabase.from("contract_signatures").upsert(
+    {
+      contract_id: contractId,
+      role: "shw",
+      signature_data_url: signatureDataUrl,
+      signed_at: new Date().toISOString(),
+      signer_email: user.email,
+      signer_name: signerName,
+      user_id: user.id,
+    },
+    { onConflict: "contract_id,role" },
+  );
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const { data: signatures } = await supabase.from("contract_signatures").select("role").eq("contract_id", contractId);
+  const roles = new Set((signatures ?? []).map((signature) => signature.role));
+
+  if (roles.has("client") && roles.has("shw")) {
+    await supabase.from("contracts").update({ status: "signed" }).eq("id", contractId);
+  }
+
+  await writeAudit("contract.signed_by_shw", { id: contractId, signerName });
+  revalidatePath("/admin");
+  revalidatePath("/client-portal");
+}

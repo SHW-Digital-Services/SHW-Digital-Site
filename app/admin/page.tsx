@@ -4,6 +4,7 @@ import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { ClientContractsZipButton, ContractPdfButton, type ContractForDownload } from "./ContractDownloads";
 import { createContract, createPaymentRecord, markClientMessageRead, sendAdminMessage, signOutAdmin, updateContractStatus } from "./actions";
+import ShwSignatureForm from "./ShwSignatureForm";
 import BrandLogo from "../BrandLogo";
 import styles from "./admin.module.css";
 
@@ -84,7 +85,7 @@ export default async function AdminDashboard() {
   const [{ data, error }, { data: messages }, { data: auditLogs }] = await Promise.all([
     supabase
       .from("contracts")
-      .select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at")
+      .select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at, contract_signatures(role, signer_name, signer_email, signature_data_url, signed_at)")
       .order("created_at", { ascending: false }),
     supabase.from("client_messages").select("id, client_email, subject, message, status, direction, created_at").order("created_at", { ascending: false }).limit(12),
     supabase.from("audit_logs").select("id, action, details, created_at").order("created_at", { ascending: false }).limit(16),
@@ -230,6 +231,7 @@ export default async function AdminDashboard() {
                           <th>Status</th>
                           <th>Produced</th>
                           <th>Download</th>
+                          <th>Signing</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -254,6 +256,13 @@ export default async function AdminDashboard() {
                             <td>{dateValue(contract.created_at)}</td>
                             <td>
                               <ContractPdfButton contract={contract} />
+                            </td>
+                            <td>
+                              <div className={styles.signatureSummary}>
+                                <span className={contract.contract_signatures?.some((signature) => signature.role === "client") ? styles.connected : styles.notConnected}>Client</span>
+                                <span className={contract.contract_signatures?.some((signature) => signature.role === "shw") ? styles.connected : styles.notConnected}>SHW</span>
+                              </div>
+                              <ShwSignatureForm contract={contract} signerName={user.email ?? "SHW Digital Services"} />
                             </td>
                           </tr>
                         ))}
@@ -367,6 +376,8 @@ export default async function AdminDashboard() {
     </main>
   );
 }
+
+
 
 
 

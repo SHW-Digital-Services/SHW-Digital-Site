@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "057698209930aeda",
+        "id": "3a501af77ef536cf",
         "type": "tabs",
         "children": [
           {
-            "id": "7e367d46e13ea0f7",
+            "id": "87fb1e5b63281b1e",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -183,8 +183,12 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "7e367d46e13ea0f7",
+  "active": "87fb1e5b63281b1e",
   "lastOpenFiles": [
+    "Client Portal/about.md.md",
+    "Billing/about.md.md",
+    "Meetings and Webinars/about.md.md",
+    "Client Portal",
     "Automation/email-workflows.md.md",
     "Automation/api.md.md",
     "Automation/updating-scripts.md.md",
@@ -208,9 +212,6 @@
     "Active Directory/about.md.md",
     "Automation/about.md.md",
     "Website Development and Maintenance/about.md.md",
-    "Tech/about.md.md",
-    "Contracts/about.md.md",
-    "Billing/about.md.md",
     "temps",
     "Other",
     "Tech",

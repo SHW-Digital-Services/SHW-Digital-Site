@@ -3,19 +3,36 @@ import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import PortalAuthForms from "./PortalAuthForms";
 import { sendClientMessage, signOutClient, updateClientProfile } from "./actions";
+import ClientContractTools from "./ClientContractTools";
 import BrandLogo from "../BrandLogo";
 import styles from "./portal.module.css";
 
 export const dynamic = "force-dynamic";
 
 type ContractRecord = {
+  client_business: string | null;
+  client_email: string | null;
+  client_name: string;
+  contract_payload: {
+    deliverables?: string;
+    paymentTerms?: string;
+    producedBy?: string;
+    scope?: string;
+    timeline?: string;
+  };
+  contract_signatures?: {
+    role: "client" | "shw";
+    signer_email: string | null;
+    signer_name: string;
+    signature_data_url: string;
+    signed_at: string;
+  }[];
+  contract_value: number | null;
+  created_at: string;
+  deposit_percent: number;
   id: number;
   service_type: string;
-  client_name: string;
-  contract_value: number | null;
-  deposit_percent: number;
   status: string;
-  created_at: string;
 };
 
 type PaymentRecord = {
@@ -84,7 +101,7 @@ export default async function ClientPortalPage() {
 
   const [{ data: profile }, { data: contracts }, { data: payments }, { data: messages }] = await Promise.all([
     supabase.from("profiles").select("contact_name, business_name, phone, address_line_1, address_line_2, city, postcode").eq("id", user.id).maybeSingle(),
-    supabase.from("contracts").select("id, service_type, client_name, contract_value, deposit_percent, status, created_at").eq("client_email", user.email).order("created_at", { ascending: false }),
+    supabase.from("contracts").select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at, contract_signatures(role, signer_name, signer_email, signature_data_url, signed_at)").eq("client_email", user.email).order("created_at", { ascending: false }),
     supabase.from("contract_payments").select("id, amount, due_date, paid_at, payment_status, payment_type, payment_url").eq("client_email", user.email).order("created_at", { ascending: false }),
     supabase.from("client_messages").select("id, client_email, direction, subject, message, status, created_at").eq("client_email", user.email).order("created_at", { ascending: false }),
   ]);
@@ -179,6 +196,7 @@ export default async function ClientPortalPage() {
                     </div>
                     <p>{contract.client_name} · {currency(contract.contract_value)} · {contract.deposit_percent}% deposit</p>
                     <p>Created {dateValue(contract.created_at)}</p>
+                    <ClientContractTools contract={contract} signerName={profile?.contact_name ?? contract.client_name} />
                   </article>
                 ))}
                 {!(contracts ?? []).length ? <p className={styles.empty}>No contracts are attached to this email yet.</p> : null}
@@ -227,6 +245,8 @@ export default async function ClientPortalPage() {
     </main>
   );
 }
+
+
 
 
 

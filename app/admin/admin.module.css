@@ -316,3 +316,29 @@
 .replyForm textarea {
   min-height: 72px;
 }
+
+.signatureForm {
+  display: grid;
+  gap: 10px;
+  min-width: 260px;
+}
+
+.signatureForm > div,
+.signatureSummary {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.signaturePad {
+  background: #ffffff;
+  border: 1px dashed #cbbfac;
+  border-radius: 8px;
+  display: block;
+  max-width: 100%;
+  min-height: 96px;
+  object-fit: contain;
+  touch-action: none;
+  width: 100%;
+}
