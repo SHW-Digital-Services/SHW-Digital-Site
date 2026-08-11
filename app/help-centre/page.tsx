@@ -1,62 +1,61 @@
 import Link from "next/link";
 import PageShell from "../PageShell";
-import { getAllKbDocuments } from "@/lib/obsidian";
+import { getAllKbDocuments, getCategoryPageData } from "@/lib/obsidian";
 
 type KbDocument = {
   category: string;
   categorySlug: string;
-  content: string;
   data?: {
     isCategoryHome?: boolean;
   };
-  slug: string;
-  title: string;
 };
 
-function excerpt(value: string) {
+type CategoryCard = {
+  articleCount: number;
+  description: string;
+  name: string;
+  slug: string;
+};
+
+function textFromHtml(value = "") {
   return value
-    .replace(/^#{1,6}\s+/gm, "")
-    .replace(/\[\[([^\]|]+\|)?([^\]]+)\]\]/g, "$2")
+    .replace(/<[^>]*>/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function groupByCategory(documents: KbDocument[]) {
-  return documents.reduce<Record<string, KbDocument[]>>((groups, document) => {
-    const category = document.category || "General";
-    groups[category] = groups[category] ?? [];
-    groups[category].push(document);
-    return groups;
-  }, {});
-}
+export default async function HelpCentrePage() {
+  const documents = (getAllKbDocuments() as KbDocument[]).filter((document) => document.categorySlug && document.categorySlug !== "index");
+  const categorySlugs = Array.from(new Set(documents.map((document) => document.categorySlug))).sort();
+  const categories = (await Promise.all(
+    categorySlugs.map(async (slug): Promise<CategoryCard> => {
+      const categoryData = await getCategoryPageData(slug);
+      const articleCount = categoryData.relatedDocuments.length;
+      const description = textFromHtml(categoryData.aboutDocument?.contentHtml).slice(0, 180);
 
-export default function HelpCentrePage() {
-  const documents = (getAllKbDocuments() as KbDocument[])
-    .filter((document) => !document.data?.isCategoryHome)
-    .sort((a, b) => a.title.localeCompare(b.title));
-  const groupedDocuments = groupByCategory(documents);
+      return {
+        articleCount,
+        description: description || `${articleCount} ${articleCount === 1 ? "article" : "articles"} available in this category.`,
+        name: categoryData.categoryName,
+        slug,
+      };
+    })
+  )).filter((category) => category.articleCount > 0 || category.description);
 
   return (
-    <PageShell eyebrow="Help Centre" title="Guidance from the knowledge base." intro="Client-facing answers and service notes from the SHW Digital Services Obsidian vault.">
-      {documents.length ? (
-        <div style={{ display: "grid", gap: 34 }}>
-          {Object.entries(groupedDocuments).map(([category, items]) => (
-            <section key={category}>
-              <h2 style={{ color: "#FDE68A", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", margin: "0 0 18px" }}>{category}</h2>
-              <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
-                {items.map((item) => (
-                  <Link key={item.slug} href={`/help-centre/${item.slug}`} style={{ background: "rgba(26, 16, 56, 0.68)", border: "1px solid rgba(234, 179, 8, 0.48)", borderRadius: 18, color: "#F5EFFF", display: "block", padding: 24, textDecoration: "none" }}>
-                    <p style={{ color: "#FDE68A", fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", margin: "0 0 8px", textTransform: "uppercase" }}>{category}</p>
-                    <h3 style={{ fontSize: 24, margin: "0 0 10px" }}>{item.title}</h3>
-                    <p style={{ color: "#BCA7DA", lineHeight: 1.7, margin: 0 }}>{excerpt(item.content)}</p>
-                  </Link>
-                ))}
-              </div>
-            </section>
+    <PageShell eyebrow="Help Centre" title="What do you need help with?" intro="Browse the SHW Digital Services knowledge base by category. These articles are published from the Obsidian vault.">
+      {categories.length ? (
+        <div style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+          {categories.map((category) => (
+            <Link key={category.slug} href={`/help-centre/category/${category.slug}`} style={{ background: "rgba(26, 16, 56, 0.72)", border: "1px solid rgba(234, 179, 8, 0.5)", borderRadius: 18, color: "#F5EFFF", display: "grid", minHeight: 210, padding: 26, textDecoration: "none" }}>
+              <p style={{ color: "#FDE68A", fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", margin: "0 0 10px", textTransform: "uppercase" }}>{category.articleCount} {category.articleCount === 1 ? "article" : "articles"}</p>
+              <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.35rem)", lineHeight: 1.05, margin: "0 0 14px" }}>{category.name}</h2>
+              <p style={{ alignSelf: "end", color: "#BCA7DA", lineHeight: 1.65, margin: 0 }}>{category.description}</p>
+            </Link>
           ))}
         </div>
       ) : (
-        <p style={{ color: "#BCA7DA", lineHeight: 1.75 }}>Knowledge base articles will appear here once published notes are added to the Obsidian vault.</p>
+        <p style={{ color: "#BCA7DA", lineHeight: 1.75 }}>Knowledge base categories will appear here once published notes are added to the Obsidian vault.</p>
       )}
     </PageShell>
   );
