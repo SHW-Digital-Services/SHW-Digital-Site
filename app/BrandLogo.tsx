@@ -28,11 +28,12 @@ export default function BrandLogo({ href = "/", size = "nav", tone = "light" }: 
         style={{
           display: "block",
           height: "auto",
-          maxHeight: size === "hero" ? 180 : 72,
+          maxHeight: size === "hero" ? 220 : 72,
           objectFit: "contain",
-          width: size === "hero" ? "clamp(260px, 36vw, 560px)" : "clamp(150px, 18vw, 230px)",
+          width: size === "hero" ? "clamp(320px, 42vw, 680px)" : "clamp(150px, 18vw, 230px)",
         }}
       />
     </Link>
   );
 }
+

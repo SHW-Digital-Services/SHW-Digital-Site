@@ -12,25 +12,12 @@ export default function CrystalScene() {
       <div
         style={{
           position: "absolute",
-          top: 20,
-          left: 0,
-          right: 0,
-          textAlign: "center",
+          top: 26,
+          left: "clamp(20px, 5vw, 72px)",
           zIndex: 100,
-          color: "white",
         }}
       >
         <BrandLogo size="hero" />
-
-        <p
-          style={{
-            color: "#D8B4FE",
-            fontSize: "1.25rem",
-            marginTop: 12,
-          }}
-        >
-          Transform. Automate. Grow.
-        </p>
       </div>
 
       <Canvas camera={{ position: [0, 0, 12] }}>
