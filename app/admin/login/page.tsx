@@ -1,5 +1,5 @@
-import Link from "next/link";
 import AdminLoginForm from "../AdminLoginForm";
+import BrandLogo from "../../BrandLogo";
 import styles from "../admin.module.css";
 
 export default function AdminLoginPage() {
@@ -7,9 +7,7 @@ export default function AdminLoginPage() {
     <main className={styles.screen}>
       <section className={styles.shell} style={{ maxWidth: 520 }}>
         <div className={styles.topbar}>
-          <Link className={styles.brand} href="/">
-            SHW Digital Services
-          </Link>
+          <BrandLogo tone="dark" />
         </div>
         <p className={styles.kicker}>Admin access</p>
         <h1 className={styles.title}>Sign in to the contract centre.</h1>
@@ -21,3 +19,4 @@ export default function AdminLoginPage() {
     </main>
   );
 }
+

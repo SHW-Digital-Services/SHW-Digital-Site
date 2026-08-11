@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 
+import BrandLogo from "./BrandLogo";
 import Crystal from "./Crystal";
 import NetworkCloud from "./NetworkCloud";
 
@@ -19,20 +20,13 @@ export default function CrystalScene() {
           color: "white",
         }}
       >
-        <h1
-          style={{
-            fontSize: "3.5rem",
-            marginBottom: "0.5rem",
-            letterSpacing: "0.1em",
-          }}
-        >
-          SHW DIGITAL SERVICES
-        </h1>
+        <BrandLogo size="hero" />
 
         <p
           style={{
             color: "#D8B4FE",
             fontSize: "1.25rem",
+            marginTop: 12,
           }}
         >
           Transform. Automate. Grow.

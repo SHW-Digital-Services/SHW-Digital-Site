@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://shwdigitalservices.site"),
   title: "SHW Digital Services",
   description: "Transform. Automate. Grow.",
+  icons: {
+    icon: "/logo/logo.ico",
+    shortcut: "/logo/logo.ico",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -72,4 +76,5 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     </html>
   );
 }
+
 

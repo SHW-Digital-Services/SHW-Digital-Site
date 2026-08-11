@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { LogOut, Send, Save } from "lucide-react";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import PortalAuthForms from "./PortalAuthForms";
 import { sendClientMessage, signOutClient, updateClientProfile } from "./actions";
+import BrandLogo from "../BrandLogo";
 import styles from "./portal.module.css";
 
 export const dynamic = "force-dynamic";
@@ -71,9 +71,7 @@ export default async function ClientPortalPage() {
       <main className={styles.screen}>
         <section className={styles.shell}>
           <div className={styles.topbar}>
-            <Link className={styles.brand} href="/">
-              SHW Digital Services
-            </Link>
+            <BrandLogo tone="dark" />
           </div>
           <p className={styles.kicker}>Client portal</p>
           <h1 className={styles.title}>Create an account or sign in.</h1>
@@ -95,9 +93,7 @@ export default async function ClientPortalPage() {
     <main className={styles.screen}>
       <section className={styles.shell}>
         <div className={styles.topbar}>
-          <Link className={styles.brand} href="/">
-            SHW Digital Services
-          </Link>
+          <BrandLogo tone="dark" />
           <form action={signOutClient}>
             <button className={styles.secondaryButton} type="submit">
               <LogOut size={17} aria-hidden="true" />
@@ -231,6 +227,8 @@ export default async function ClientPortalPage() {
     </main>
   );
 }
+
+
 
 
 

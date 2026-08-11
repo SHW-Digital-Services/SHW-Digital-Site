@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "./BrandLogo";
 
 type PageShellProps = {
   eyebrow: string;
@@ -10,9 +11,9 @@ type PageShellProps = {
 export default function PageShell({ eyebrow, title, intro, children }: PageShellProps) {
   return (
     <main style={{ minHeight: "100vh", background: "radial-gradient(circle at 50% 0%, #24124D, #120824 52%, #070411)", color: "#F5EFFF", fontFamily: "Arial, Helvetica, sans-serif", padding: "32px 7vw 72px" }}>
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 1120, margin: "0 auto 100px" }}>
-        <Link href="/" style={{ color: "#F5EFFF", fontSize: 18, fontWeight: 700, letterSpacing: "0.16em", textDecoration: "none" }}>SHW Digital Services</Link>
-        <Link href="/" style={{ color: "#D8B4FE", textDecoration: "none" }}>← Return to the crystal</Link>
+      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 20, maxWidth: 1120, margin: "0 auto 100px" }}>
+        <BrandLogo />
+        <Link href="/" style={{ color: "#D8B4FE", textDecoration: "none" }}>Return to the crystal</Link>
       </nav>
       <section style={{ maxWidth: 1120, margin: "0 auto" }}>
         <p style={{ color: "#C084FC", fontSize: 13, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>{eyebrow}</p>
