@@ -230,6 +230,10 @@ textarea {
   margin: 1.8em 0 0.65em;
 }
 
+.kb-article h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
 .kb-article h1:first-child,
 .kb-article h2:first-child,
 .kb-article h3:first-child {
@@ -252,3 +256,4 @@ textarea {
   border-radius: 6px;
   padding: 0.12em 0.35em;
 }
+

@@ -43,7 +43,7 @@ export default async function HelpCentrePage() {
   )).filter((category) => category.articleCount > 0 || category.description);
 
   return (
-    <PageShell eyebrow="Help Centre" title="What do you need help with?" intro="Browse the SHW Digital Services knowledge base by category. These articles are published from the Obsidian vault.">
+    <PageShell eyebrow="Help Centre" title="What do you need help with?" intro="Browse the SHW Digital Services knowledge base by category.">
       {categories.length ? (
         <div style={{ display: "grid", gap: 18, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
           {categories.map((category) => (
@@ -60,3 +60,4 @@ export default async function HelpCentrePage() {
     </PageShell>
   );
 }
+
