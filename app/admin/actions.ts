@@ -187,38 +187,6 @@ export async function markClientMessageRead(formData: FormData) {
   revalidatePath("/admin");
 }
 
-export async function saveKnowledgeBaseItem(formData: FormData) {
-  const id = optionalNumber(formData, "id");
-  const title = textValue(formData, "title");
-  const category = textValue(formData, "category") || "General";
-  const content = textValue(formData, "content");
-  const published = textValue(formData, "published") === "on";
-
-  if (!title || !content) {
-    throw new Error("Knowledge base title and content are required.");
-  }
-
-  const supabase = await createClient();
-  const payload = {
-    category,
-    content,
-    published,
-    title,
-    updated_at: new Date().toISOString(),
-  };
-
-  const { error } = id
-    ? await supabase.from("knowledge_base").update(payload).eq("id", id)
-    : await supabase.from("knowledge_base").insert(payload);
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  await writeAudit(id ? "knowledge_base.updated" : "knowledge_base.created", { id, title, published });
-  revalidatePath("/admin");
-  revalidatePath("/about");
-}
 
 
 
@@ -251,3 +219,4 @@ export async function sendAdminMessage(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath("/client-portal");
 }
+

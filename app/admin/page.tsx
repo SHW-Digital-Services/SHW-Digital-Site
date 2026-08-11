@@ -3,7 +3,7 @@ import { Check, CreditCard, LogOut, Mail, Plus, Send, Settings } from "lucide-re
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { ClientContractsZipButton, ContractPdfButton, type ContractForDownload } from "./ContractDownloads";
-import { createContract, createPaymentRecord, markClientMessageRead, saveKnowledgeBaseItem, sendAdminMessage, signOutAdmin, updateContractStatus } from "./actions";
+import { createContract, createPaymentRecord, markClientMessageRead, sendAdminMessage, signOutAdmin, updateContractStatus } from "./actions";
 import BrandLogo from "../BrandLogo";
 import styles from "./admin.module.css";
 
@@ -30,13 +30,6 @@ type AuditLog = {
   created_at: string;
 };
 
-type KnowledgeBaseItem = {
-  id: number;
-  category: string;
-  content: string;
-  published: boolean;
-  title: string;
-};
 
 function groupByClient(contracts: ContractRecord[]) {
   return contracts.reduce<Record<string, ContractRecord[]>>((groups, contract) => {
@@ -88,14 +81,13 @@ export default async function AdminDashboard() {
     redirect("/admin/unauthorised");
   }
 
-  const [{ data, error }, { data: messages }, { data: auditLogs }, { data: knowledgeBase }] = await Promise.all([
+  const [{ data, error }, { data: messages }, { data: auditLogs }] = await Promise.all([
     supabase
       .from("contracts")
       .select("id, service_type, client_name, client_business, client_email, contract_value, deposit_percent, status, contract_payload, created_at")
       .order("created_at", { ascending: false }),
     supabase.from("client_messages").select("id, client_email, subject, message, status, direction, created_at").order("created_at", { ascending: false }).limit(12),
     supabase.from("audit_logs").select("id, action, details, created_at").order("created_at", { ascending: false }).limit(16),
-    supabase.from("knowledge_base").select("id, category, title, content, published").order("updated_at", { ascending: false }),
   ]);
 
   const contracts = (data ?? []).map((contract) => ({
@@ -354,57 +346,6 @@ export default async function AdminDashboard() {
 
 
             <section className={styles.panel}>
-              <h2>Knowledge base</h2>
-              <form action={saveKnowledgeBaseItem} className={styles.formGrid}>
-                <label className={styles.field}>
-                  <span>Title</span>
-                  <input name="title" required />
-                </label>
-                <label className={styles.field}>
-                  <span>Category</span>
-                  <input name="category" defaultValue="General" />
-                </label>
-                <label className={styles.field}>
-                  <span>Content</span>
-                  <textarea name="content" required />
-                </label>
-                <label className={styles.checkboxRow}>
-                  <input name="published" type="checkbox" defaultChecked />
-                  Published
-                </label>
-                <button className={styles.primaryButton} type="submit">
-                  <Plus size={18} aria-hidden="true" />
-                  Add article
-                </button>
-              </form>
-              <div className={styles.list} style={{ marginTop: 18 }}>
-                {((knowledgeBase ?? []) as KnowledgeBaseItem[]).map((item) => (
-                  <form action={saveKnowledgeBaseItem} className={styles.item} key={item.id}>
-                    <input name="id" type="hidden" value={item.id} />
-                    <div className={styles.formGrid}>
-                      <label className={styles.field}>
-                        <span>Title</span>
-                        <input name="title" defaultValue={item.title} required />
-                      </label>
-                      <label className={styles.field}>
-                        <span>Category</span>
-                        <input name="category" defaultValue={item.category} />
-                      </label>
-                      <label className={styles.field}>
-                        <span>Content</span>
-                        <textarea name="content" defaultValue={item.content} required />
-                      </label>
-                      <label className={styles.checkboxRow}>
-                        <input name="published" type="checkbox" defaultChecked={item.published} />
-                        Published
-                      </label>
-                      <button className={styles.secondaryButton} type="submit">Update article</button>
-                    </div>
-                  </form>
-                ))}
-              </div>
-            </section>
-            <section className={styles.panel}>
               <h2>Audit log</h2>
 
               <div className={styles.list}>
@@ -426,6 +367,9 @@ export default async function AdminDashboard() {
     </main>
   );
 }
+
+
+
 
 
 
