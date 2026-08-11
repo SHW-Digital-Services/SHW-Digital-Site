@@ -1,0 +1,206 @@
+.screen {
+  background: #f3f7f0;
+  color: #162018;
+  min-height: 100vh;
+  padding: 28px 5vw 56px;
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.topbar,
+.cardHeader {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.topbar {
+  margin-bottom: 32px;
+}
+
+.brand {
+  color: #162018;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.kicker {
+  color: #3d6d4a;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 0.96;
+  margin: 0;
+  max-width: 820px;
+}
+
+.intro {
+  color: #405345;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 18px 0 0;
+  max-width: 760px;
+}
+
+.authGrid,
+.dashboardGrid {
+  display: grid;
+  gap: 18px;
+  margin-top: 34px;
+}
+
+.authGrid {
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+}
+
+.dashboardGrid {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+}
+
+.stack {
+  display: grid;
+  gap: 18px;
+}
+
+.panel {
+  background: #fbfff8;
+  border: 1px solid #cbdbc8;
+  border-radius: 8px;
+  box-shadow: 0 18px 45px rgba(39, 64, 44, 0.08);
+  padding: 22px;
+}
+
+.panel h2,
+.panel h3 {
+  margin-top: 0;
+}
+
+.formGrid,
+.list {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field span {
+  color: #314838;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.field input,
+.field textarea {
+  background: #ffffff;
+  border: 1px solid #bdd0bb;
+  border-radius: 6px;
+  color: #162018;
+  font: inherit;
+  padding: 11px 12px;
+  width: 100%;
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.primaryButton,
+.secondaryButton {
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 800;
+  gap: 8px;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.primaryButton {
+  background: #17351f;
+  color: #fbfff8;
+  padding: 12px 15px;
+}
+
+.secondaryButton {
+  background: #dfeadb;
+  color: #162018;
+  padding: 10px 12px;
+}
+
+.item {
+  border: 1px solid #d6e4d3;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.item p {
+  color: #405345;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+
+.meta {
+  color: #58715e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.error {
+  color: #9f1239;
+  font-weight: 700;
+}
+
+.success {
+  color: #166534;
+  font-weight: 700;
+}
+
+.empty {
+  border: 1px dashed #bdd0bb;
+  border-radius: 8px;
+  color: #58715e;
+  padding: 18px;
+}
+
+@media (max-width: 860px) {
+  .authGrid,
+  .dashboardGrid,
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar,
+  .cardHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

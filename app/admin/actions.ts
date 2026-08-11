@@ -14,6 +14,14 @@ function textValue(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+async function writeAudit(action: string, details: Record<string, unknown> = {}) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("audit_logs").insert({ action, details });
+  if (error) {
+    console.error(error.message);
+  }
+}
+
 function optionalNumber(formData: FormData, key: string) {
   const value = textValue(formData, key);
   if (!value) {
@@ -103,6 +111,7 @@ export async function createContract(formData: FormData) {
     throw new Error(error.message);
   }
 
+  await writeAudit("contract.created", { clientName, serviceType });
   revalidatePath("/admin");
 }
 
@@ -122,6 +131,88 @@ export async function updateContractStatus(formData: FormData) {
     throw new Error(error.message);
   }
 
+  await writeAudit("contract.status_updated", { id, status });
   revalidatePath("/admin");
 }
+
+
+export async function createPaymentRecord(formData: FormData) {
+  const clientEmail = textValue(formData, "clientEmail");
+  const amount = optionalNumber(formData, "amount");
+  const paymentType = textValue(formData, "paymentType") || "Contract payment";
+  const paymentUrl = textValue(formData, "paymentUrl");
+
+  if (!clientEmail || amount === null) {
+    throw new Error("Client email and amount are required.");
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("contract_payments").insert({
+    amount,
+    client_email: clientEmail,
+    due_date: textValue(formData, "dueDate") || null,
+    payment_status: "due",
+    payment_type: paymentType,
+    payment_url: paymentUrl || null,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("payment.created", { amount, clientEmail, paymentType });
+  revalidatePath("/admin");
+}
+
+export async function markClientMessageRead(formData: FormData) {
+  const id = optionalNumber(formData, "id");
+
+  if (!id) {
+    throw new Error("A valid message is required.");
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("client_messages").update({ status: "read" }).eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit("client_message.read", { id });
+  revalidatePath("/admin");
+}
+
+export async function saveKnowledgeBaseItem(formData: FormData) {
+  const id = optionalNumber(formData, "id");
+  const title = textValue(formData, "title");
+  const category = textValue(formData, "category") || "General";
+  const content = textValue(formData, "content");
+  const published = textValue(formData, "published") === "on";
+
+  if (!title || !content) {
+    throw new Error("Knowledge base title and content are required.");
+  }
+
+  const supabase = await createClient();
+  const payload = {
+    category,
+    content,
+    published,
+    title,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = id
+    ? await supabase.from("knowledge_base").update(payload).eq("id", id)
+    : await supabase.from("knowledge_base").insert(payload);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await writeAudit(id ? "knowledge_base.updated" : "knowledge_base.created", { id, title, published });
+  revalidatePath("/admin");
+  revalidatePath("/about");
+}
+
 

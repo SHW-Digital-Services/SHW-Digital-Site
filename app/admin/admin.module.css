@@ -223,3 +223,77 @@
     flex-direction: column;
   }
 }
+
+.stack,
+.list,
+.integrationGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.item,
+.integrationCard {
+  border: 1px solid #e0d4c2;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.item p,
+.integrationCard p {
+  color: #564b40;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+
+.meta {
+  color: #6d5f4e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge,
+.connected,
+.notConnected {
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 10px;
+}
+
+.badge {
+  background: #e7dccb;
+  color: #17201c;
+}
+
+.connected {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.notConnected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.integrationCard {
+  align-content: start;
+  display: grid;
+  gap: 8px;
+}
+
+.integrationCard h3 {
+  margin: 0;
+}
+
+.checkboxRow {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.checkboxRow input {
+  height: 18px;
+  width: 18px;
+}
