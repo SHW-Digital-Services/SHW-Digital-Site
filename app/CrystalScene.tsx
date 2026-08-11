@@ -1,22 +1,27 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 
 import BrandLogo from "./BrandLogo";
 import Crystal from "./Crystal";
 import NetworkCloud from "./NetworkCloud";
 
+function HomeSceneContent() {
+  const { size } = useThree();
+  const isMobile = size.width < 720;
+
+  return (
+    <group position={[0, isMobile ? -1.15 : -2.5, 0]} scale={isMobile ? 0.72 : 1}>
+      <Crystal />
+      <NetworkCloud />
+    </group>
+  );
+}
+
 export default function CrystalScene() {
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          top: 26,
-          left: "clamp(20px, 5vw, 72px)",
-          zIndex: 100,
-        }}
-      >
+      <div className="home-logo-panel">
         <BrandLogo size="hero" />
       </div>
 
@@ -29,10 +34,7 @@ export default function CrystalScene() {
           color="#C084FC"
         />
 
-        <group position={[0, -2.5, 0]}>
-          <Crystal />
-          <NetworkCloud />
-        </group>
+        <HomeSceneContent />
       </Canvas>
     </>
   );

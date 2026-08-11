@@ -37,14 +37,15 @@ export default function NetworkNode({ color, position, label, description, href,
     >
       <PlasmaOrb color={color} position={[0, 0, 0]} speed={speed} />
       <Html center distanceFactor={7} position={[0, 1.32, 0]}>
-        <Link href={href} style={{ color: "#F5EFFF", display: "block", fontFamily: "Arial, sans-serif", textAlign: "center", textDecoration: "none", textShadow: `0 0 8px #070411, 0 0 18px ${color}, 0 0 28px ${color}`, whiteSpace: "nowrap", pointerEvents: "auto", cursor: "pointer" }}>
-          <div style={{ fontSize: "3.4rem", fontWeight: 700, letterSpacing: "0.12em" }}>{label.toUpperCase()}</div>
-          <div style={{ color: "#F5EFFF", fontSize: "2.1rem", fontWeight: 800, letterSpacing: "0.04em", marginTop: 8, textShadow: `0 0 10px #070411, 0 0 22px ${color}, 0 0 34px ${color}` }}>{description}</div>
+        <Link href={href} className="node-link" style={{ textShadow: `0 0 8px #070411, 0 0 18px ${color}, 0 0 28px ${color}` }}>
+          <div className="node-title">{label.toUpperCase()}</div>
+          <div className="node-description" style={{ textShadow: `0 0 10px #070411, 0 0 22px ${color}, 0 0 34px ${color}` }}>{description}</div>
         </Link>
       </Html>
     </group>
   );
 }
+
 
 
 

@@ -10,16 +10,16 @@ type PageShellProps = {
 
 export default function PageShell({ eyebrow, title, intro, children }: PageShellProps) {
   return (
-    <main style={{ minHeight: "100vh", background: "radial-gradient(circle at 50% 0%, #24124D, #120824 52%, #070411)", color: "#F5EFFF", fontFamily: "Arial, Helvetica, sans-serif", padding: "32px 7vw 72px" }}>
-      <nav style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 20, maxWidth: 1120, margin: "0 auto 100px" }}>
+    <main className="page-shell">
+      <nav className="page-shell-nav">
         <BrandLogo />
-        <Link href="/" style={{ color: "#D8B4FE", textDecoration: "none" }}>Return to the crystal</Link>
+        <Link href="/" className="page-shell-return">Return to the crystal</Link>
       </nav>
-      <section style={{ maxWidth: 1120, margin: "0 auto" }}>
-        <p style={{ color: "#C084FC", fontSize: 13, fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>{eyebrow}</p>
-        <h1 style={{ fontSize: "clamp(3rem, 9vw, 7rem)", lineHeight: 0.95, margin: "18px 0 26px", maxWidth: 900 }}>{title}</h1>
-        <p style={{ color: "#D8B4FE", fontSize: "clamp(1.1rem, 2vw, 1.45rem)", lineHeight: 1.6, maxWidth: 720 }}>{intro}</p>
-        <div style={{ height: 1, background: "linear-gradient(90deg, #C084FC, transparent)", margin: "64px 0" }} />
+      <section className="page-shell-content">
+        <p className="page-shell-eyebrow">{eyebrow}</p>
+        <h1 className="page-shell-title">{title}</h1>
+        <p className="page-shell-intro">{intro}</p>
+        <div className="page-shell-rule" />
         {children}
       </section>
     </main>

@@ -12,6 +12,7 @@ export default function BrandLogo({ href = "/", size = "nav", tone = "light" }: 
     <Link
       href={href}
       aria-label="SHW Digital Services home"
+      className={`brand-logo brand-logo-${size}`}
       style={{
         alignItems: "center",
         display: "inline-flex",
@@ -22,18 +23,16 @@ export default function BrandLogo({ href = "/", size = "nav", tone = "light" }: 
       <Image
         src="/logo/logo.png"
         alt="SHW Digital Services"
-        width={560}
-        height={180}
+        width={680}
+        height={220}
         priority={size === "hero"}
         style={{
           display: "block",
           height: "auto",
-          maxHeight: size === "hero" ? 220 : 72,
           objectFit: "contain",
-          width: size === "hero" ? "clamp(320px, 42vw, 680px)" : "clamp(150px, 18vw, 230px)",
+          width: "100%",
         }}
       />
     </Link>
   );
 }
-
