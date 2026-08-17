@@ -14,7 +14,7 @@ export default function ContactPage() {
           src={formUrl}
           title="SHW Digital Services enquiry form"
           width="100%"
-          height="760"
+          height="1200"
           style={{ border: 0, display: "block", minHeight: "70vh", width: "100%" }}
         />
         <p style={{ color: "#BCA7DA", fontSize: 14, lineHeight: 1.6, margin: "18px 0 0" }}>
