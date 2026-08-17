@@ -92,6 +92,15 @@ function createZip(files: { data: Uint8Array; name: string }[]) {
   return new Blob([...localParts.map(blobPart), ...centralParts.map(blobPart), blobPart(new Uint8Array(end))], { type: "application/zip" });
 }
 
+function notifyDownload(action: () => void, successMessage: string) {
+  try {
+    action();
+    window.alert(successMessage);
+  } catch (error) {
+    window.alert(error instanceof Error ? error.message : "The download could not be created.");
+  }
+}
+
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -105,7 +114,7 @@ export function ContractPdfButton({ contract }: { contract: ContractForDownload 
   return (
     <button
       className={styles.iconButton}
-      onClick={() => createContractPdf(contract).save(`shw-contract-${contract.id}-${fileSafe(contract.client_name)}.pdf`)}
+      onClick={() => notifyDownload(() => createContractPdf(contract).save(`shw-contract-${contract.id}-${fileSafe(contract.client_name)}.pdf`), "Contract PDF downloaded.")}
       type="button"
       title="Download contract PDF"
       aria-label="Download contract PDF"
@@ -119,13 +128,13 @@ export function ClientContractsZipButton({ clientName, contracts }: { clientName
   return (
     <button
       className={styles.secondaryButton}
-      onClick={() => {
+      onClick={() => notifyDownload(() => {
         const files = contracts.map((contract) => ({
           data: new Uint8Array(createContractPdf(contract).output("arraybuffer")),
           name: `shw-contract-${contract.id}-${fileSafe(contract.service_type)}.pdf`,
         }));
         downloadBlob(createZip(files), `shw-contracts-${fileSafe(clientName)}.zip`);
-      }}
+      }, "Client contract ZIP downloaded.")}
       type="button"
       title="Download all client contracts as a ZIP"
     >

@@ -80,16 +80,21 @@ export default function SignatureCapture({
     if (!canvas || !context) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
     setSignatureDataUrl("");
+    window.alert("Signature cleared.");
   };
 
   const upload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) return;
+    if (!file || !file.type.startsWith("image/")) {
+      window.alert("Choose an image file for the signature.");
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
         setSignatureDataUrl(reader.result);
+        window.alert("Signature uploaded.");
       }
     };
     reader.readAsDataURL(file);

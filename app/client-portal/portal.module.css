@@ -185,6 +185,25 @@
   font-weight: 700;
 }
 
+.notice {
+  border-radius: 8px;
+  font-weight: 800;
+  margin: 18px 0 0;
+  padding: 13px 15px;
+}
+
+.noticeSuccess {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.noticeError {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
 .empty {
   border: 1px dashed #bdd0bb;
   border-radius: 8px;

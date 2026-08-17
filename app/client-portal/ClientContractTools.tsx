@@ -15,9 +15,23 @@ export default function ClientContractTools({ contract, signerName }: { contract
   const shwSignature = signatureStatus(contract, "shw");
 
   const viewPdf = () => {
-    const url = URL.createObjectURL(createContractPdf(contract).output("blob"));
-    window.open(url, "_blank", "noopener,noreferrer");
-    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    try {
+      const url = URL.createObjectURL(createContractPdf(contract).output("blob"));
+      window.open(url, "_blank", "noopener,noreferrer");
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      window.alert("Contract PDF opened.");
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "The contract PDF could not be opened.");
+    }
+  };
+
+  const downloadPdf = () => {
+    try {
+      createContractPdf(contract).save(`shw-contract-${contract.id}-${fileSafe(contract.client_name)}.pdf`);
+      window.alert("Contract PDF downloaded.");
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "The contract PDF could not be downloaded.");
+    }
   };
 
   return (
@@ -27,7 +41,7 @@ export default function ClientContractTools({ contract, signerName }: { contract
           <Eye size={17} aria-hidden="true" />
           View PDF
         </button>
-        <button className={styles.secondaryButton} onClick={() => createContractPdf(contract).save(`shw-contract-${contract.id}-${fileSafe(contract.client_name)}.pdf`)} type="button">
+        <button className={styles.secondaryButton} onClick={downloadPdf} type="button">
           <Download size={17} aria-hidden="true" />
           Download PDF
         </button>

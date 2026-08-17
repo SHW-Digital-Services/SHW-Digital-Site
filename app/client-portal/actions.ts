@@ -14,6 +14,11 @@ function textValue(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function redirectWithNotice(type: "success" | "error", message: string): never {
+  const params = new URLSearchParams({ notice: message, noticeType: type });
+  redirect(`/client-portal?${params.toString()}`);
+}
+
 export async function signInClient(_state: PortalActionState, formData: FormData): Promise<PortalActionState> {
   const email = textValue(formData, "email");
   const password = textValue(formData, "password");
@@ -84,7 +89,7 @@ export async function sendClientMessage(formData: FormData) {
   const message = textValue(formData, "message");
 
   if (!subject || !message) {
-    throw new Error("Subject and message are required.");
+    redirectWithNotice("error", "Subject and message are required.");
   }
 
   const supabase = await createClient();
@@ -105,10 +110,11 @@ export async function sendClientMessage(formData: FormData) {
   });
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
+  redirectWithNotice("success", "Message sent.");
 }
 
 export async function updateClientProfile(formData: FormData) {
@@ -143,19 +149,19 @@ export async function updateClientProfile(formData: FormData) {
 
     if (!error) {
       revalidatePath("/client-portal");
-      return;
+      redirectWithNotice("success", "Contact information saved.");
     }
 
     const missingColumn = optionalProfileColumns.find((column) => error.message.toLowerCase().includes(column.toLowerCase()));
 
     if (!missingColumn) {
-      throw new Error(error.message);
+      redirectWithNotice("error", error.message);
     }
 
     delete profilePayload[missingColumn];
   }
 
-  throw new Error("Profile could not be saved because the database schema is out of date.");
+  redirectWithNotice("error", "Profile could not be saved because the database schema is out of date.");
 }
 
 
@@ -165,7 +171,7 @@ export async function signClientContract(formData: FormData) {
   const signatureDataUrl = textValue(formData, "signatureDataUrl");
 
   if (!Number.isFinite(contractId) || !signerName || !signatureDataUrl.startsWith("data:image/")) {
-    throw new Error("A valid contract, signer name, and signature are required.");
+    redirectWithNotice("error", "A valid contract, signer name, and signature are required.");
   }
 
   const supabase = await createClient();
@@ -180,11 +186,11 @@ export async function signClientContract(formData: FormData) {
   const { data: contract, error: contractError } = await supabase.from("contracts").select("id, client_email").eq("id", contractId).maybeSingle();
 
   if (contractError) {
-    throw new Error(contractError.message);
+    redirectWithNotice("error", contractError.message);
   }
 
   if (!contract || contract.client_email?.toLowerCase() !== user.email.toLowerCase()) {
-    throw new Error("This contract is not available to this account.");
+    redirectWithNotice("error", "This contract is not available to this account.");
   }
 
   const { error } = await supabase.from("contract_signatures").upsert(
@@ -201,7 +207,7 @@ export async function signClientContract(formData: FormData) {
   );
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   const { data: signatures } = await supabase.from("contract_signatures").select("role").eq("contract_id", contractId);
@@ -213,6 +219,7 @@ export async function signClientContract(formData: FormData) {
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "Contract signature saved.");
 }
 
 async function requirePortalUser() {
@@ -234,7 +241,7 @@ export async function createSupportTicket(formData: FormData) {
   const priority = textValue(formData, "priority") || "normal";
 
   if (!subject || !details) {
-    throw new Error("Subject and details are required.");
+    redirectWithNotice("error", "Subject and details are required.");
   }
 
   const { email, supabase, user } = await requirePortalUser();
@@ -248,11 +255,12 @@ export async function createSupportTicket(formData: FormData) {
   });
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "Support ticket created.");
 }
 
 export async function requestTeamMemberAccess(formData: FormData) {
@@ -261,7 +269,7 @@ export async function requestTeamMemberAccess(formData: FormData) {
   const requestedRole = textValue(formData, "requestedRole");
 
   if (!colleagueName || !colleagueEmail || !requestedRole) {
-    throw new Error("Colleague name, email, and role are required.");
+    redirectWithNotice("error", "Colleague name, email, and role are required.");
   }
 
   const { email, supabase, user } = await requirePortalUser();
@@ -283,18 +291,19 @@ export async function requestTeamMemberAccess(formData: FormData) {
     const missingTicketType = error.message.toLowerCase().includes("ticket_type");
 
     if (!missingTicketType) {
-      throw new Error(error.message);
+      redirectWithNotice("error", error.message);
     }
 
     const { error: retryError } = await supabase.from("support_tickets").insert(ticket);
 
     if (retryError) {
-      throw new Error(retryError.message);
+      redirectWithNotice("error", retryError.message);
     }
   }
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "Team access request sent.");
 }
 
 export async function addScopeComment(formData: FormData) {
@@ -302,7 +311,7 @@ export async function addScopeComment(formData: FormData) {
   const comment = textValue(formData, "comment");
 
   if (!Number.isFinite(contractId) || !comment) {
-    throw new Error("A valid contract and comment are required.");
+    redirectWithNotice("error", "A valid contract and comment are required.");
   }
 
   const { email, supabase, user } = await requirePortalUser();
@@ -314,29 +323,30 @@ export async function addScopeComment(formData: FormData) {
   });
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "Scope comment added.");
 }
 
 export async function approveProjectScope(formData: FormData) {
   const contractId = Number(textValue(formData, "contractId"));
 
   if (!Number.isFinite(contractId)) {
-    throw new Error("A valid contract is required.");
+    redirectWithNotice("error", "A valid contract is required.");
   }
 
   const { email, supabase, user } = await requirePortalUser();
   const { data: contract, error: contractError } = await supabase.from("contracts").select("id, client_email").eq("id", contractId).maybeSingle();
 
   if (contractError) {
-    throw new Error(contractError.message);
+    redirectWithNotice("error", contractError.message);
   }
 
   if (!contract || contract.client_email?.toLowerCase() !== email.toLowerCase()) {
-    throw new Error("This scope is not available to this account.");
+    redirectWithNotice("error", "This scope is not available to this account.");
   }
 
   const { error } = await supabase.from("scope_approvals").upsert(
@@ -350,11 +360,12 @@ export async function approveProjectScope(formData: FormData) {
   );
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "Project scope approved.");
 }
 
 function fileNamePart(value: string) {
@@ -383,15 +394,15 @@ export async function uploadClientFile(formData: FormData) {
   const note = textValue(formData, "note");
 
   if (!Number.isFinite(contractId)) {
-    throw new Error("Choose the contract this file relates to.");
+    redirectWithNotice("error", "Choose the contract this file relates to.");
   }
 
   if (!(file instanceof File) || file.size === 0) {
-    throw new Error("Choose a file to upload.");
+    redirectWithNotice("error", "Choose a file to upload.");
   }
 
   if (file.size > 8 * 1024 * 1024) {
-    throw new Error("Files must be 8MB or smaller.");
+    redirectWithNotice("error", "Files must be 8MB or smaller.");
   }
 
   const { email, supabase, user } = await requirePortalUser();
@@ -402,11 +413,11 @@ export async function uploadClientFile(formData: FormData) {
     .maybeSingle();
 
   if (contractError) {
-    throw new Error(contractError.message);
+    redirectWithNotice("error", contractError.message);
   }
 
   if (!contract || contract.client_email?.toLowerCase() !== email.toLowerCase()) {
-    throw new Error("This contract is not available to this account.");
+    redirectWithNotice("error", "This contract is not available to this account.");
   }
 
   const extension = fileExtension(file.name);
@@ -421,7 +432,7 @@ export async function uploadClientFile(formData: FormData) {
   const { error: uploadError } = await supabase.storage.from("client-files").upload(path, file, { upsert: false });
 
   if (uploadError) {
-    throw new Error(uploadError.message);
+    redirectWithNotice("error", uploadError.message);
   }
 
   const { error } = await supabase.from("client_files").insert({
@@ -436,9 +447,10 @@ export async function uploadClientFile(formData: FormData) {
   });
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
   revalidatePath("/admin");
+  redirectWithNotice("success", "File uploaded.");
 }

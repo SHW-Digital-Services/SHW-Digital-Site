@@ -110,7 +110,17 @@ function fileSize(value: number) {
   return `${(value / 1024 / 1024).toFixed(1)} MB`;
 }
 
-export default async function ClientPortalPage() {
+function searchParamValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function actionNotice(searchParams: Record<string, string | string[] | undefined>) {
+  const message = searchParamValue(searchParams.notice);
+  const type = searchParamValue(searchParams.noticeType) === "error" ? "error" : "success";
+  return message ? { message, type } : null;
+}
+
+export default async function ClientPortalPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   if (!hasSupabaseEnv()) {
     return (
       <main className={styles.screen}>
@@ -145,6 +155,7 @@ export default async function ClientPortalPage() {
   }
 
   const userEmail = user.email;
+  const notice = actionNotice(await searchParams);
 
   const [{ data: profile }, { data: contracts }, { data: payments }, { data: messages }, { data: tickets }, { data: files }, { data: comments }, { data: approvals }] = await Promise.all([
     supabase.from("profiles").select("contact_name, business_name, phone, address_line_1, address_line_2, city, postcode, notification_project_updates, notification_billing, notification_marketing").eq("id", user.id).maybeSingle(),
@@ -179,6 +190,7 @@ export default async function ClientPortalPage() {
         <p className={styles.kicker}>Client portal</p>
         <h1 className={styles.title}>Your business workspace.</h1>
         <p className={styles.intro}>Signed in as {userEmail}. Review contracts and payment records, keep your business profile current, and send messages to the admin portal.</p>
+        {notice ? <p className={`${styles.notice} ${notice.type === "error" ? styles.noticeError : styles.noticeSuccess}`} role={notice.type === "error" ? "alert" : "status"}>{notice.message}</p> : null}
 
         <div className={styles.dashboardGrid}>
           <div className={styles.stack}>

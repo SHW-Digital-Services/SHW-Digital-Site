@@ -97,7 +97,17 @@ function integrationStatus(keys: string[]) {
   return keys.every((key) => Boolean(process.env[key]));
 }
 
-export default async function AdminDashboard() {
+function searchParamValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function actionNotice(searchParams: Record<string, string | string[] | undefined>) {
+  const message = searchParamValue(searchParams.notice);
+  const type = searchParamValue(searchParams.noticeType) === "error" ? "error" : "success";
+  return message ? { message, type } : null;
+}
+
+export default async function AdminDashboard({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   if (!hasSupabaseEnv()) {
     return (
       <main className={styles.screen}>
@@ -145,6 +155,7 @@ export default async function AdminDashboard() {
   })) as ContractRecord[];
   const groupedContracts = groupByClient(contracts);
   const unreadMessages = ((messages ?? []) as ClientMessage[]).filter((message) => message.status === "new" && message.direction !== "admin_to_client").length;
+  const notice = actionNotice(await searchParams);
   const integrations = [
     { name: "Mailchimp", connected: integrationStatus(["MAILCHIMP_API_KEY", "MAILCHIMP_SERVER_PREFIX", "MAILCHIMP_AUDIENCE_ID"]), detail: "Audience and campaign automation settings." },
     { name: "Stripe", connected: integrationStatus(["STRIPE_SECRET_KEY"]), detail: "Payment links or Checkout can power client portal payments." },
@@ -167,6 +178,7 @@ export default async function AdminDashboard() {
         <p className={styles.kicker}>Admin dashboard</p>
         <h1 className={styles.title}>Contract centre.</h1>
         <p className={styles.intro}>Produce contracts, create Stripe payment records, track messages from the client portal, and review the audit log.</p>
+        {notice ? <p className={`${styles.notice} ${notice.type === "error" ? styles.noticeError : styles.noticeSuccess}`} role={notice.type === "error" ? "alert" : "status"}>{notice.message}</p> : null}
 
         <div className={styles.grid}>
           <div className={styles.stack}>
