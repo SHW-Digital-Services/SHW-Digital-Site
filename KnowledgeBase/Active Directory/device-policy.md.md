@@ -21,3 +21,5 @@ If staff use their personal laptops or phones for work, it creates unique securi
 - **Screen Lock Timeouts:** Devices should automatically lock after a short period of inactivity.
     
 - **USB Drive Restrictions:** Preventing the use of unauthorized USB thumb drives to stop data leaks or malware infections.
+
+[about.md](about.md.md)

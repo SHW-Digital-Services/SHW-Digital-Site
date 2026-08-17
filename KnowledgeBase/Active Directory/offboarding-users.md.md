@@ -21,3 +21,5 @@ If you are on an ongoing administration plan, please notify SHW Digital Services
 3. **Data Retention and Forwarding:** We can configure the departed employee's email to forward to a manager or set an auto-responder. User data (like OneDrive files) can be archived or transferred securely.
     
 4. **License Reallocation:** Cost savings are achieved by unassigning paid Microsoft licenses from the disabled account so they can be reused or cancelled.
+
+[about.md](about.md.md)

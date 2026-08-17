@@ -23,3 +23,5 @@ Default security parameters are established to protect your network. This ensure
 ### 4. Handover and Next Steps
 
 Once the foundation is solid, we hand over the basic administrative documentation. From here, you can begin adding new users (at £15 per user) or establish more complex device policies.
+
+[about.md](about.md.md)

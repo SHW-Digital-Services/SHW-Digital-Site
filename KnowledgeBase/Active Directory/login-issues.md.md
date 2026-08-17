@@ -30,3 +30,5 @@ If you enter the wrong password too many times, Active Directory will automatica
 ### 3. "Trust Relationship" Error
 
 If you see an error stating _"The trust relationship between this workstation and the primary domain failed,"_ your computer has lost its secure connection to the network. Do not attempt to fix this yourself; it requires an administrator to rejoin the device to the domain.
+
+[about.md](about.md.md)

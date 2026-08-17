@@ -25,3 +25,5 @@ While every contract is holistic and tailored to your specific business needs, a
 ### What is Excluded?
 
 Major structural changes (like merging with another company's network) or high-volume tasks (like setting up 20 new users at once) are generally scoped as separate mini-projects outside the standard monthly retainer. The exact inclusions will always be confirmed before the agreement begins.
+
+[about.md](about.md.md)
