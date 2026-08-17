@@ -24,3 +24,5 @@ We rarely recommend a "big bang" approach where the old system is turned off on 
 - **Parallel Running:** We often migrate a small subset of the data first, allowing your team to test the new system and verify that reports and automations work correctly.
     
 - **The Final Cut-Over:** Once tested, a final script is run over a weekend to migrate the very latest changes from the legacy system before locking it into a read-only archive state.
+
+[Back to Tech Category](about.md.md)

@@ -17,3 +17,4 @@ Currently, to maintain strict security over who can view your project scopes and
 2. Provide the colleague's full name, email address, and required role (e.g., Billing Only, Support Only, or Full Access).
     
 3. We will provision the account and send them a secure invitation link directly.
+[Back to Client Portal Catagory](about.md.md)

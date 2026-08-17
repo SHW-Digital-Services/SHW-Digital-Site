@@ -4,17 +4,31 @@
     "type": "split",
     "children": [
       {
-        "id": "3bff9f16cfd67ff7",
+        "id": "9740b6fd2de8a8b6",
         "type": "tabs",
         "children": [
           {
-            "id": "86c64c70dfa6c345",
+            "id": "233f135311429759",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "index.md.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": true,
+                "backlinkOpts": {
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "index.md"
             }
           }
         ]
@@ -95,6 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "index.md.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "index.md.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
@@ -182,34 +198,34 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "86c64c70dfa6c345",
+  "active": "233f135311429759",
   "lastOpenFiles": [
-    "Other/accessibility.md.md",
-    "Other/drp.md.md",
-    "Other/hardware-procurement.md.md",
-    "Other/custom-project.md.md",
-    "Other/staff-training.md.md",
-    "Other/communication-channels.md.md",
-    "Other/feedback-testimonials.md.md",
-    "Other/business-hours.md.md",
-    "Other/consultation-call.md.md",
-    "Other/about.md.md",
-    "Client Portal/about.md.md",
-    "Contracts/about.md.md",
+    "Active Directory/admin-access-levels.md.md",
+    "Active Directory/device-policy.md.md",
+    "Active Directory/gpo.md.md",
+    "Active Directory/login-issues.md.md",
+    "Active Directory/monthly-admin.md.md",
+    "Active Directory/new-user.md.md",
+    "Active Directory/offboarding-users.md.md",
+    "Active Directory/password-policy.md.md",
+    "Active Directory/setup-process.md.md",
+    "Active Directory/permissions-review.md.md",
+    "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
+    "Meetings and Webinars/screen-share.md.md",
+    "Meetings and Webinars/recordings.md.md",
+    "Meetings and Webinars/practice-run.md.md",
+    "Meetings and Webinars/post-session-support.md.md",
+    "Meetings and Webinars/participant-management.md.md",
+    "Meetings and Webinars/mics-webcams.md.md",
+    "Meetings and Webinars/Meeting Technical Issues.md",
+    "Meetings and Webinars/licensing.md.md",
+    "Meetings and Webinars/guest-speaker-preparation.md.md",
+    "Meetings and Webinars/branded-registration-page.md.md",
     "Meetings and Webinars/about.md.md",
-    "Website Development and Maintenance/web-analytics.md.md",
-    "Website Development and Maintenance/landing-brochure-sites.md.md",
-    "Website Development and Maintenance/additional-page.md.md",
-    "Website Development and Maintenance/ssl.md.md",
-    "Website Development and Maintenance/dns.md.md",
-    "Website Development and Maintenance/ongoing-maintenance.md.md",
-    "Website Development and Maintenance/content-images.md.md",
-    "Website Development and Maintenance/seo.md.md",
-    "Website Development and Maintenance/startersite-requirements.md.md",
-    "Website Development and Maintenance/booking-systems.md.md",
-    "index.md.md",
-    "Tech/data-backup.md.md",
+    "Other/Booking a Service.md",
     "Tech/api.md.md",
+    "Website Development and Maintenance/web-analytics.md.md",
+    "Website Development and Maintenance/startersite-requirements.md.md",
     "Untitled.base",
     "Client Portal",
     "temps",

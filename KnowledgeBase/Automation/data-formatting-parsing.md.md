@@ -20,3 +20,5 @@ Data parsing scripts take a raw input (like a massive CSV export from an old sof
     
 
 These practical scripts ensure that by the time a human needs to look at the data, it is clean, accurate, and ready to use.
+
+[Back to Automation Catagory](about.md.md)

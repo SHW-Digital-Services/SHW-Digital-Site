@@ -22,3 +22,5 @@ If you pay your monthly retainer via GoCardless Direct Debit:
 ### Changing the Billing Contact
 
 If the person who processes your invoices leaves the business, please notify us immediately. We can update the primary billing email address on our accounting software in minutes to ensure the next invoice goes to the correct person.
+
+[Back to Automation Billing](about.md.md)

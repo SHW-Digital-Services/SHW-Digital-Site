@@ -19,4 +19,6 @@ If we have just built a new CRM automation for you, or migrated your team to Mic
 
 ### Scope and Cost
 
-Training sessions are scoped and billed separately from the core development project. They typically start from £120 for a one-hour, customized group workshop including the recording delivery.v
+Training sessions are scoped and billed separately from the core development project. They typically start from £120 for a one-hour, customized group workshop including the recording delivery.
+
+[Back to Other Services and Information Category](about.md.md)

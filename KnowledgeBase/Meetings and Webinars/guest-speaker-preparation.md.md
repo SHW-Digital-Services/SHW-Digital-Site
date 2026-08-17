@@ -17,3 +17,5 @@ When you utilize our Meetings and Webinars service, SHW Digital Services takes t
 - **The Green Room:** We ask speakers to join 15 minutes before the broadcast begins. We hold them in a private digital "Green Room" to do a final microphone and camera check before allowing the audience in.
     
 - **Live Guidance:** If a speaker drops offline during the event, our support technicians will contact them via phone or instant message to help them reconnect, while you continue hosting the event seamlessly.
+
+[Back to Meetings and Webinars Category](about.md.md)

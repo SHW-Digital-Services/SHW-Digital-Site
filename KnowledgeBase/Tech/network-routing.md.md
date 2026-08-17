@@ -19,3 +19,5 @@ Before submitting an urgent support ticket, you can perform basic triage to pinp
 3. **Ping the Router:** Can your computers communicate with the building's main router? Open a command prompt and try to "ping" the router's IP address (usually 192.168.1.1 or similar). If you get a reply, your internal network is fine.
     
 4. **Check the Modem/ISP:** If you can reach the router but not the internet, the issue is likely with your Internet Service Provider (ISP) or the physical line coming into the building. Check the router for red warning lights.
+
+[Back to Tech Category](about.md.md)

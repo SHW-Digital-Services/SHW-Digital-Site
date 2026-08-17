@@ -20,3 +20,5 @@ We can build scripts that connect to your business email (like Microsoft 365 or 
     
 
 Automating these workflows ensures your clients always receive prompt, consistent communication while giving time back to the people running the business.
+
+[Back to Automation Catagory](about.md.md)

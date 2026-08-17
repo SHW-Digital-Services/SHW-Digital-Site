@@ -20,3 +20,5 @@ You have control over how and when SHW Digital Services contacts you. You can ad
 ### Critical Communications
 
 Please note that while you can opt out of marketing or general update emails, you cannot opt out of critical system alerts, invoice deliveries, or security breach notifications, as these are essential for the safe management of your account.
+
+[Back to Client Portal Catagory](about.md.md)

@@ -18,3 +18,5 @@ When we build a script to connect systems (for example, taking a new lead from y
     
 
 By connecting systems directly, you eliminate the security risk of staff downloading sensitive spreadsheets to their local computers just to upload them somewhere else.
+
+[Back to Automation Catagory](about.md.md)

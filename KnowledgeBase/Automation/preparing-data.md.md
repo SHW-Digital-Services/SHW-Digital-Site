@@ -19,3 +19,5 @@ Before automating a workflow, write down every single click and keystroke a huma
 ### 3. Prepare Test Data
 
 We will need "dummy" data to test the script safely. Never test a brand-new automation on live client data. Prepare a folder of fake files or test accounts that we can use to verify the script works perfectly before it goes live.
+
+[Back to Automation Catagory](about.md.md)

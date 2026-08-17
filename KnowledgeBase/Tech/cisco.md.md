@@ -22,3 +22,5 @@ Every device on a network needs a unique identifier to communicate, known as an 
 - **DHCP:** Instead of manually assigning these addresses, a DHCP server (often built into the router) automatically hands out IP addresses to devices as they connect.
     
 - **Subnetting:** Think of a subnet as dividing a large office building into smaller departments. Subnetting breaks a large network down into smaller, more manageable, and more secure segments (for example, keeping the guest Wi-Fi on a separate subnet from the accounting servers).
+
+[Back to Tech Category](about.md.md)

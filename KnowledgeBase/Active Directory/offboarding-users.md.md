@@ -22,4 +22,4 @@ If you are on an ongoing administration plan, please notify SHW Digital Services
     
 4. **License Reallocation:** Cost savings are achieved by unassigning paid Microsoft licenses from the disabled account so they can be reused or cancelled.
 
-[about.md](about.md.md)
+[Back to Active Directory Category](about.md.md)

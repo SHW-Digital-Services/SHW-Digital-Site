@@ -22,3 +22,5 @@ The easiest way to understand an API is to think of a restaurant.
 ### How We Use APIs
 
 When SHW Digital Services builds an automation, we use APIs. Instead of a human opening an accounting app and typing in an invoice, our script acts as the "waiter," securely carrying the invoice data from your CRM directly to the accounting software's "kitchen" in milliseconds.
+
+[Back to Tech Category](about.md.md)

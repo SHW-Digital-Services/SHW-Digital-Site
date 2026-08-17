@@ -8,3 +8,5 @@ isCategoryHome: false
 ---
 ## Do you offer practice runs before the live event?
 Yes, technical rehearsals are available as an add-on for £25 to ensure everything runs smoothly on the day.
+
+[Back to Meetings and Webinars Category](about.md.md)

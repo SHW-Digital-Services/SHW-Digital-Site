@@ -24,3 +24,5 @@ If you have forgotten your password or simply want to update it for security rea
 ### Account Lockouts
 
 For security reasons, your account will temporarily lock after five consecutive failed login attempts. If this happens, please wait 15 minutes before trying again or attempting a password reset.
+
+[Back to Client Portal Catagory](about.md.md)

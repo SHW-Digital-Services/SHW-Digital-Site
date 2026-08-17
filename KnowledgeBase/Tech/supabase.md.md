@@ -23,3 +23,5 @@ Supabase provides two main keys: the `anon` (public) key and the `service_role` 
 - **The Anon Key:** This is safe to use in your frontend application (like a React website), provided you have strict RLS policies enabled.
     
 - **The Service Role Key:** **Never** expose this key to the public. It bypasses all Row Level Security. It should only be used in secure backend environments, like serverless Edge Functions.
+
+[Back to Tech Category](about.md.md)

@@ -25,4 +25,4 @@ Think of a Group Policy as a set of rules. Instead of manually configuring setti
 
 GPOs save massive amounts of administrative time and ensure your environment remains uniform and secure.
 
-[about.md](about.md.md)
+[Back to Active Directory Category](about.md.md)

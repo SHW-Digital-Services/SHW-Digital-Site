@@ -22,3 +22,5 @@ The industry standard for reliable data protection is the 3-2-1 rule. You should
 ### Testing is Mandatory
 
 A backup is worthless if it cannot be restored. SHW Digital Services highly recommends scheduling quarterly "test restores" to ensure the data is uncorrupted and can be retrieved quickly in an emergency.
+
+[Back to Tech Category](about.md.md)

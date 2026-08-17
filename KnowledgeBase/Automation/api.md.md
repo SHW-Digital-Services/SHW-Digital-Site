@@ -21,3 +21,5 @@ Instead of a human clicking buttons on a screen, an API allows our automation sc
 - **Reliability:** Unlike "screen-scraping" (where a script tries to read a web page visually), APIs do not break just because a software company redesigned how their dashboard looks.
     
 - **Security:** API connections are authenticated with specific keys that can be easily revoked without changing your main user passwords.
+
+[Back to Automation Catagory](about.md.md)

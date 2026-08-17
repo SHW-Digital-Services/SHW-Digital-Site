@@ -20,3 +20,5 @@ While all invoices are emailed to your primary billing contact, the Client Porta
 ### Downloading for Your Records
 
 To download a PDF copy of an invoice or a payment receipt for your own accounting software, click the **Download PDF** icon next to the relevant transaction. You can also view upcoming estimated charges for your next monthly retainer billing cycle.
+
+[Back to Client Portal Catagory](about.md.md)

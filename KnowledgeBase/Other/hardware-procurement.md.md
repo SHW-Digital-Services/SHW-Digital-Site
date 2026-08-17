@@ -21,3 +21,5 @@ Instead of selling you marked-up equipment, we provide expert procurement advice
 2. Provide you with the exact technical specifications required (e.g., RAM, processor speed, hard drive size).
     
 3. Recommend trusted direct vendors (like Dell or Lenovo) so you can purchase the hardware directly using your own business accounts.
+
+[Back to Other Services and Information Category](about.md.md)

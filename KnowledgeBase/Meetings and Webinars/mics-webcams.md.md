@@ -22,3 +22,5 @@ Audiences will forgive a slightly blurry camera, but they will leave immediately
 - **External Cameras:** A 1080p external USB webcam (like a Logitech C920) is a massive step up from standard laptop cameras.
     
 - **Lighting:** Ensure your primary light source (a window or a ring light) is positioned _in front_ of you, lighting your face. Never sit with your back to a bright window.
+
+[Back to Meetings and Webinars Category](about.md.md)

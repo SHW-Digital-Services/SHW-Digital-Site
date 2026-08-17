@@ -20,3 +20,5 @@ When managing your event, SHW Digital Services implements strict room controls.
 ### Handling Disruptions
 
 If an attendee accidentally unmutes or causes a disruption, our background technicians will instantly mute them. If the disruption is intentional, the user will be securely removed from the meeting and banned from re-entering.
+
+[Back to Meetings and Webinars Category](about.md.md)

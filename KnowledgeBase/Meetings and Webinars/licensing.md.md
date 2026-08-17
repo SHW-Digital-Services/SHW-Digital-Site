@@ -20,3 +20,5 @@ Choosing the right software platform is critical to the success of your online e
 ### Licensing
 
 If your business does not hold an expensive "Webinar500" license, you do not need to buy one for a one-off event. We can host the event on SHW Digital Services' enterprise-grade licenses, providing you access to premium features without the annual subscription costs.
+
+[Back to Meetings and Webinars Category](about.md.md)

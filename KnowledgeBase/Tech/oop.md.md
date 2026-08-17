@@ -24,3 +24,5 @@ For example, if we are building a system for a mechanic, we might create a `Car`
 - **Modularity:** Because code is broken down into these independent objects, if you want to change how the `calculate_mileage()` action works, we only have to update that one specific block of code, without breaking the rest of the software.
     
 - **Reusability:** If we build a `Customer` object for your booking system, we can easily reuse that exact same object logic later if you decide to add an invoicing system.
+
+[Back to Tech Category](about.md.md)

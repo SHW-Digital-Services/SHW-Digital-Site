@@ -24,3 +24,5 @@ Please provide all written website copy in a single, well-organized digital docu
 - **File Transfer:** Do not send images embedded inside a Word document or via WhatsApp, as this degrades the quality. Please upload images directly to the secure folder we provide in your Client Portal, or share a Dropbox/Google Drive link.
     
 - **Copyright:** You must own the rights to the images you provide, or have purchased the appropriate stock licenses. We cannot use images saved directly from a Google Image search.
+
+[Back to Website Development and Maintenance Category](about.md.md)

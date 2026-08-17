@@ -19,3 +19,5 @@ In situations where an ongoing service (like website hosting) experiences a seve
 ### Cancellation Scenarios
 
 If you must cancel a project mid-build, we will assess the work completed to date. If the value of the completed work is less than your deposit, no further billing will occur. If the work exceeds the deposit, a final invoice for the unbilled hours will be generated.
+
+[Back to Automation Billing](about.md.md)

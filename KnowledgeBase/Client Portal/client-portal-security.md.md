@@ -18,3 +18,5 @@ Protecting your business data is our top priority. We use the Client Portal spec
     
 
 By keeping all project scopes, invoices, and file transfers inside the portal, we significantly reduce the risk of phishing attacks or intercepted communications.
+
+[Back to Client Portal Catagory](about.md.md)

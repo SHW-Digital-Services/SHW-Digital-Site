@@ -26,3 +26,5 @@ Once the immediate bleeding has stopped, the secondary phase begins.
 - **Engage Support:** Contact your IT provider or SHW Digital Services immediately so we can begin auditing logs to determine the extent of the breach.
     
 - **Compliance:** Remember that under UK GDPR, you have a strict 72-hour window to report significant data breaches to the Information Commissioner's Office (ICO).
+
+[Back to Tech Category](about.md.md)

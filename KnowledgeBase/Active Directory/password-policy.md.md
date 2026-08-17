@@ -24,4 +24,4 @@ Active Directory allows you to enforce specific rules for all user passwords. We
 
 Passwords alone are no longer enough. We highly recommend pairing your Active Directory password policy with Multi-Factor Authentication (MFA). This requires the user to approve a prompt on their mobile phone after entering their password, drastically reducing the risk of a compromised account.
 
-[about.md](about.md.md)
+[Back to Active Directory Category](about.md.md)

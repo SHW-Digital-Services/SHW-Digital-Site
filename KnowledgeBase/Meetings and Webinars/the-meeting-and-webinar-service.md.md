@@ -24,3 +24,5 @@ Designed for large, broadcast-style presentations (50 to 500+ people).
 - **Format:** Only the host and panelists are on camera. Attendees are automatically muted and interact only via Q&A and Chat boxes.
     
 - **Our Role:** We manage the complex backend registration, run the pre-show tech checks, moderate the Q&A queue, and ensure the broadcast stays stable under heavy attendance.
+
+[Back to Meetings and Webinars Category](about.md.md)

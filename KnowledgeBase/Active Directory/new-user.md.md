@@ -29,4 +29,4 @@ To ensure a smooth setup, please provide the following information when requesti
 
 Once the details are submitted, the account is provisioned with the principle of least privilege—meaning they only get access to exactly what they need, keeping your network secure. Temporary login credentials will be securely provided to the manager or directly to the new user on their first day
 
-[about.md](about.md.md)
+[Back to Active Directory Category](about.md.md)

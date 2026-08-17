@@ -15,3 +15,5 @@ Clunky screen sharing is one of the most common ways to lose audience engagement
 - **Clear the Clutter:** If you must share your whole desktop, close all non-essential tabs, mute your email notifications, and hide your desktop icons before the meeting begins.
     
 - **The "Share Sound" Checkbox:** If your presentation includes a video clip, you _must_ remember to check the "Share Computer Audio" box in your meeting software before starting the share, otherwise the audience will watch the video in silence.
+
+[Back to Meetings and Webinars Category](about.md.md)

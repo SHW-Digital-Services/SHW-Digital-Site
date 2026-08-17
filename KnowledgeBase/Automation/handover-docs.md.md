@@ -22,3 +22,5 @@ While simple scripts might be self-explanatory, we highly recommend adding docum
 ### Ownership
 
 Once the script is paid for and handed over, you own the code. You are not locked into our systems, and you are free to run the script as many times as you like.
+
+[Back to Automation Catagory](about.md.md)

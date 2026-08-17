@@ -17,3 +17,4 @@ The absolute best way to communicate with us regarding an active project, suppor
 - **Email:** Great for initial inquiries, billing alerts, and sharing calendar invites.
     
 - **WhatsApp / SMS:** For security and tracking reasons, **we do not accept support requests or project assets via WhatsApp, SMS, or social media direct messages.** If you send a request via these channels, you will be politely asked to log it in the portal.
+[Back to Other Services and Information Category](about.md.md)

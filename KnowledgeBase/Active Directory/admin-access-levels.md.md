@@ -6,7 +6,6 @@ category:
 - Active Directory 
 isCategoryHome: false
 ---
-
 Not all users are created equal within a dependable Microsoft environment. Managing access levels strictly is key to maintaining a secure system.
 
 ### The Principle of Least Privilege
@@ -24,4 +23,4 @@ This core security concept dictates that a user should only be given the absolut
 
 A critical security best practice is separating administrative accounts from everyday user accounts. Even IT professionals should not use an Administrator account for their daily tasks (like checking email or browsing the web). If an Administrator clicks a malicious link in an email, the virus immediately gains full administrative control of the entire network. Admin accounts should only be logged into when explicitly performing administrative tasks, ideally from a Secure Admin Workstation (SAW).
 
-[about.md](about.md.md)
+[Back to Active Directory Category](about.md.md)

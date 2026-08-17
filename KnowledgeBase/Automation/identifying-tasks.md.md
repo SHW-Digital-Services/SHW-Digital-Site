@@ -21,3 +21,5 @@ When looking for tasks to automate, look for these three characteristics:
     
 
 If you have a task that fits this description, making an enquiry with SHW Digital Services is the best next step to see if a practical script can give you that time back.
+
+[Back to Automation Catagory](about.md.md)

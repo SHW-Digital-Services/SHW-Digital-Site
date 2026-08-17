@@ -27,3 +27,5 @@ If you are on an ongoing service plan (such as Active Directory administration o
     
 
 All invoices are sent digitally as PDF attachments to the designated billing email address provided during the initial setup.
+
+[Back to Automation Billing](about.md.md)
