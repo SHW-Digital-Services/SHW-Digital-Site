@@ -4,31 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "abc482f16dd0879a",
+        "id": "3bff9f16cfd67ff7",
         "type": "tabs",
         "children": [
           {
-            "id": "ded5349222ce3baf",
+            "id": "86c64c70dfa6c345",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
-                "mode": "source",
-                "source": false,
-                "backlinks": true,
-                "backlinkOpts": {
-                  "collapseAll": false,
-                  "extraContext": false,
-                  "sortOrder": "alphabetical",
-                  "showSearch": false,
-                  "searchQuery": "",
-                  "backlinkCollapsed": false,
-                  "unlinkedCollapsed": true
-                }
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "the-meeting-and-webinar-service.md"
+              "title": "New tab"
             }
           }
         ]
@@ -109,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +113,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
                 "linksCollapsed": true,
                 "unlinkedCollapsed": true
               },
@@ -198,34 +182,34 @@
       "markdown-importer:Open format converter": false
     }
   },
-  "active": "ded5349222ce3baf",
+  "active": "86c64c70dfa6c345",
   "lastOpenFiles": [
-    "Meetings and Webinars/screen-share.md.md",
-    "Meetings and Webinars/service-for-small-teams.md.md",
-    "Meetings and Webinars/recordings.md.md",
-    "Meetings and Webinars/practice-run.md.md",
-    "Meetings and Webinars/post-session-support.md.md",
-    "Meetings and Webinars/participant-management.md.md",
-    "Meetings and Webinars/mics-webcams.md.md",
-    "Meetings and Webinars/Meeting Technical Issues.md",
-    "Meetings and Webinars/meeting-software-license.md.md",
-    "Meetings and Webinars/guest-speaker-preparation.md.md",
-    "Meetings and Webinars/full-webinar-hosting-support-cost.md.md",
-    "Meetings and Webinars/licensing.md.md",
-    "Meetings and Webinars/basic-meeting-support-cost.md.md",
-    "Meetings and Webinars/the-meeting-and-webinar-service.md.md",
-    "Meetings and Webinars/branded-registration-page.md.md",
+    "Other/accessibility.md.md",
+    "Other/drp.md.md",
+    "Other/hardware-procurement.md.md",
+    "Other/custom-project.md.md",
+    "Other/staff-training.md.md",
+    "Other/communication-channels.md.md",
+    "Other/feedback-testimonials.md.md",
+    "Other/business-hours.md.md",
+    "Other/consultation-call.md.md",
+    "Other/about.md.md",
+    "Client Portal/about.md.md",
+    "Contracts/about.md.md",
     "Meetings and Webinars/about.md.md",
-    "Active Directory/about.md.md",
-    "Client Portal/client-portal-security.md.md",
-    "Billing/prorated-billing.md.md",
-    "Billing/disputing-charges.md.md",
-    "Billing/start-price-final-quotes.md.md",
-    "Billing/update-pay-methods.md.md",
-    "Billing/month-support-charges.md.md",
-    "Billing/late-pay-pol.md.md",
-    "Billing/invoice-gen.md.md",
-    "Billing/payment-methods.md.md",
+    "Website Development and Maintenance/web-analytics.md.md",
+    "Website Development and Maintenance/landing-brochure-sites.md.md",
+    "Website Development and Maintenance/additional-page.md.md",
+    "Website Development and Maintenance/ssl.md.md",
+    "Website Development and Maintenance/dns.md.md",
+    "Website Development and Maintenance/ongoing-maintenance.md.md",
+    "Website Development and Maintenance/content-images.md.md",
+    "Website Development and Maintenance/seo.md.md",
+    "Website Development and Maintenance/startersite-requirements.md.md",
+    "Website Development and Maintenance/booking-systems.md.md",
+    "index.md.md",
+    "Tech/data-backup.md.md",
+    "Tech/api.md.md",
     "Untitled.base",
     "Client Portal",
     "temps",
