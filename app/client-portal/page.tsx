@@ -67,6 +67,7 @@ type SupportTicket = {
 };
 
 type ClientFile = {
+  contract_id: number | null;
   created_at: string;
   file_name: string;
   file_size: number;
@@ -151,14 +152,16 @@ export default async function ClientPortalPage() {
     supabase.from("contract_payments").select("id, amount, due_date, paid_at, payment_status, payment_type, payment_url").eq("client_email", userEmail).order("created_at", { ascending: false }),
     supabase.from("client_messages").select("id, client_email, direction, subject, message, status, created_at").eq("client_email", userEmail).order("created_at", { ascending: false }),
     supabase.from("support_tickets").select("id, subject, details, priority, status, ticket_type, created_at").eq("client_email", userEmail).order("created_at", { ascending: false }),
-    supabase.from("client_files").select("id, file_name, file_size, note, created_at").eq("client_email", userEmail).order("created_at", { ascending: false }),
+    supabase.from("client_files").select("id, contract_id, file_name, file_size, note, created_at").eq("client_email", userEmail).order("created_at", { ascending: false }),
     supabase.from("scope_comments").select("id, contract_id, comment, created_at").eq("client_email", userEmail).order("created_at", { ascending: false }),
     supabase.from("scope_approvals").select("contract_id, approved_at").eq("client_email", userEmail),
   ]);
-  const contractIds = ((contracts ?? []) as ContractRecord[]).map((contract) => contract.id);
+  const contractRecords = (contracts ?? []) as ContractRecord[];
+  const contractIds = contractRecords.map((contract) => contract.id);
   const { data: milestones } = contractIds.length
     ? await supabase.from("project_milestones").select("id, contract_id, title, status, due_date").in("contract_id", contractIds).order("created_at", { ascending: true })
     : { data: [] };
+  const contractNameById = new Map(contractRecords.map((contract) => [contract.id, `${contract.service_type} - ${dateValue(contract.created_at)}`]));
 
   return (
     <main className={styles.screen}>
@@ -282,7 +285,7 @@ export default async function ClientPortalPage() {
             <section className={styles.panel}>
               <h2>Contracts</h2>
               <div className={styles.list}>
-                {((contracts ?? []) as ContractRecord[]).map((contract) => (
+                {contractRecords.map((contract) => (
                   <article className={styles.item} key={contract.id}>
                     <div className={styles.cardHeader}>
                       <h3>{contract.service_type}</h3>
@@ -400,11 +403,11 @@ export default async function ClientPortalPage() {
               <h2>Files</h2>
               <form action={uploadClientFile} className={styles.formGrid}>
                 <label className={styles.field}>
-                  <span>Project</span>
-                  <select name="contractId" defaultValue="">
-                    <option value="">General upload</option>
-                    {((contracts ?? []) as ContractRecord[]).map((contract) => (
-                      <option key={contract.id} value={contract.id}>{contract.service_type}</option>
+                  <span>Contract</span>
+                  <select name="contractId" defaultValue="" required>
+                    <option value="" disabled>Select a contract</option>
+                    {contractRecords.map((contract) => (
+                      <option key={contract.id} value={contract.id}>{contract.service_type} - {contract.client_name} - {dateValue(contract.created_at)}</option>
                     ))}
                   </select>
                 </label>
@@ -428,6 +431,7 @@ export default async function ClientPortalPage() {
                       <h3>{file.file_name}</h3>
                       <span className={styles.meta}>{fileSize(file.file_size)}</span>
                     </div>
+                    {file.contract_id ? <p>{contractNameById.get(file.contract_id) ?? "Contract unavailable"}</p> : null}
                     {file.note ? <p>{file.note}</p> : null}
                     <p>{dateValue(file.created_at)}</p>
                   </article>

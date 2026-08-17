@@ -121,7 +121,7 @@ export async function updateClientProfile(formData: FormData) {
     redirect("/client-portal");
   }
 
-  const { error } = await supabase.from("profiles").upsert({
+  const profilePayload: Record<string, string | boolean | null> = {
     address_line_1: textValue(formData, "addressLine1") || null,
     address_line_2: textValue(formData, "addressLine2") || null,
     business_name: textValue(formData, "businessName") || null,
@@ -135,13 +135,27 @@ export async function updateClientProfile(formData: FormData) {
     notification_billing: formData.get("billingEmails") === "on",
     notification_marketing: formData.get("marketingEmails") === "on",
     updated_at: new Date().toISOString(),
-  });
+  };
+  const optionalProfileColumns = Object.keys(profilePayload).filter((column) => !["email", "id"].includes(column));
 
-  if (error) {
-    throw new Error(error.message);
+  for (let attempt = 0; attempt <= optionalProfileColumns.length; attempt += 1) {
+    const { error } = await supabase.from("profiles").upsert(profilePayload);
+
+    if (!error) {
+      revalidatePath("/client-portal");
+      return;
+    }
+
+    const missingColumn = optionalProfileColumns.find((column) => error.message.toLowerCase().includes(column.toLowerCase()));
+
+    if (!missingColumn) {
+      throw new Error(error.message);
+    }
+
+    delete profilePayload[missingColumn];
   }
 
-  revalidatePath("/client-portal");
+  throw new Error("Profile could not be saved because the database schema is out of date.");
 }
 
 
@@ -251,18 +265,32 @@ export async function requestTeamMemberAccess(formData: FormData) {
   }
 
   const { email, supabase, user } = await requirePortalUser();
-  const { error } = await supabase.from("support_tickets").insert({
+  const ticket = {
     client_email: email,
     details: `Please provision portal access for ${colleagueName} (${colleagueEmail}) with role: ${requestedRole}.`,
     priority: "normal",
     status: "new",
     subject: "Team member access request",
-    ticket_type: "team_access",
     user_id: user.id,
+  };
+
+  const { error } = await supabase.from("support_tickets").insert({
+    ...ticket,
+    ticket_type: "team_access",
   });
 
   if (error) {
-    throw new Error(error.message);
+    const missingTicketType = error.message.toLowerCase().includes("ticket_type");
+
+    if (!missingTicketType) {
+      throw new Error(error.message);
+    }
+
+    const { error: retryError } = await supabase.from("support_tickets").insert(ticket);
+
+    if (retryError) {
+      throw new Error(retryError.message);
+    }
   }
 
   revalidatePath("/client-portal");
@@ -329,11 +357,34 @@ export async function approveProjectScope(formData: FormData) {
   revalidatePath("/admin");
 }
 
+function fileNamePart(value: string) {
+  return value
+    .trim()
+    .replace(/\.[^.]+$/, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "file";
+}
+
+function fileExtension(fileName: string) {
+  const extension = fileName.includes(".") ? fileName.split(".").pop() : "";
+  return fileNamePart(extension || "file").toLowerCase();
+}
+
+function compactDate(value: Date) {
+  const day = String(value.getDate()).padStart(2, "0");
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const year = String(value.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+}
+
 export async function uploadClientFile(formData: FormData) {
   const file = formData.get("file");
-  const contractIdValue = textValue(formData, "contractId");
-  const contractId = contractIdValue ? Number(contractIdValue) : null;
+  const contractId = Number(textValue(formData, "contractId"));
   const note = textValue(formData, "note");
+
+  if (!Number.isFinite(contractId)) {
+    throw new Error("Choose the contract this file relates to.");
+  }
 
   if (!(file instanceof File) || file.size === 0) {
     throw new Error("Choose a file to upload.");
@@ -344,8 +395,29 @@ export async function uploadClientFile(formData: FormData) {
   }
 
   const { email, supabase, user } = await requirePortalUser();
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-  const path = `${user.id}/${Date.now()}-${safeName}`;
+  const { data: contract, error: contractError } = await supabase
+    .from("contracts")
+    .select("id, client_email, client_name, service_type")
+    .eq("id", contractId)
+    .maybeSingle();
+
+  if (contractError) {
+    throw new Error(contractError.message);
+  }
+
+  if (!contract || contract.client_email?.toLowerCase() !== email.toLowerCase()) {
+    throw new Error("This contract is not available to this account.");
+  }
+
+  const extension = fileExtension(file.name);
+  const displayFileName = [
+    fileNamePart(contract.client_name || email),
+    fileNamePart(contract.service_type),
+    fileNamePart(file.name),
+    compactDate(new Date()),
+    extension,
+  ].join(".");
+  const path = `${user.id}/${contract.id}/${Date.now()}-${displayFileName}`;
   const { error: uploadError } = await supabase.storage.from("client-files").upload(path, file, { upsert: false });
 
   if (uploadError) {
@@ -354,8 +426,8 @@ export async function uploadClientFile(formData: FormData) {
 
   const { error } = await supabase.from("client_files").insert({
     client_email: email,
-    contract_id: Number.isFinite(contractId) ? contractId : null,
-    file_name: file.name,
+    contract_id: contract.id,
+    file_name: displayFileName,
     file_path: path,
     file_size: file.size,
     mime_type: file.type || "application/octet-stream",
