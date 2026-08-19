@@ -3,6 +3,26 @@ import PageShell from "../PageShell";
 export default function AboutPage() {
   return (
     <PageShell eyebrow="About SHW Digital Services" title="A digital consultancy for businesses." intro="SHW Digital Services helps businesses make confident decisions about technology, systems, and digital growth. Every contract is approached holistically and tailored to the client, because no business, challenge, or service requirement is the same.">
+      <section style={{ marginBottom: 36 }}>
+        <video
+          controls
+          playsInline
+          preload="metadata"
+          aria-label="Introduction video for SHW Digital Services"
+          style={{
+            aspectRatio: "16 / 9",
+            background: "#070411",
+            border: "1px solid #6D28D9",
+            borderRadius: 18,
+            boxShadow: "0 24px 70px rgba(7, 4, 17, 0.45)",
+            display: "block",
+            width: "100%",
+          }}
+        >
+          <source src="/videos/Intro%20Video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </section>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 22 }}>
         <article style={{ border: "1px solid #6D28D9", borderRadius: 18, background: "#1A1038AA", padding: 28 }}>
           <h2>One client. One approach.</h2>
