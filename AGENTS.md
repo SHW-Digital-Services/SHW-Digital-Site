@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Autonoma test data
+
+Autonoma provisions realistic end-to-end test data through `/api/autonoma`, whose factories follow the application's own Supabase creation paths. Whenever a model or its creation code changes, add or update the matching factory in `lib/autonoma/factories.ts` and revalidate the recipe lifecycle.

@@ -1,0 +1,27 @@
+# Autonoma integration
+
+- [ ] `profiles` factory
+- [ ] `audit_logs` factory
+- [ ] `website_metrics` factory
+- [ ] `contracts` factory
+- [ ] `contract_payments` factory
+- [ ] `client_messages` factory
+- [ ] `knowledge_base` factory
+- [ ] `contract_signatures` factory
+- [ ] `support_tickets` factory
+- [ ] `client_files` factory
+- [ ] `scope_comments` factory
+- [ ] `scope_approvals` factory
+- [ ] `project_milestones` factory
+- [ ] `/api/autonoma` SDK endpoint
+- [ ] Strict, idempotent teardown
+- [ ] Real Supabase auth callback
+- [ ] Agent-instructions maintenance note
+- [ ] Entity-by-entity endpoint and database validation
+- [ ] Full-recipe endpoint lifecycle pass
+- [ ] Wrong-signature rejection proof
+- [ ] Time-relative data verification
+- [ ] Concurrent-instances proof (`--repeat 3`)
+- [ ] Clean `sdk check` on `recipe.json`
+- [ ] Integration-only commit
+- [ ] Pushed branch and opened pull request

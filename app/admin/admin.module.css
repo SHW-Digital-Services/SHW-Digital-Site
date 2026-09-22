@@ -204,6 +204,25 @@
   font-weight: 700;
 }
 
+.notice {
+  border-radius: 8px;
+  font-weight: 800;
+  margin: 18px 0 0;
+  padding: 13px 15px;
+}
+
+.noticeSuccess {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.noticeError {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
 .empty {
   border: 1px dashed #cbbfac;
   border-radius: 8px;
@@ -296,4 +315,66 @@
 .checkboxRow input {
   height: 18px;
   width: 18px;
+}
+
+.panelNested,
+.replyForm {
+  background: #fbf6ee;
+  border: 1px solid #e0d4c2;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  margin: 14px 0;
+  padding: 14px;
+}
+
+.panelNested h3 {
+  margin: 0;
+}
+
+.replyForm textarea {
+  min-height: 72px;
+}
+
+.signatureForm {
+  display: grid;
+  gap: 10px;
+  min-width: 260px;
+}
+
+.signatureForm > div,
+.signatureSummary {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.signaturePad {
+  background: #ffffff;
+  border: 1px dashed #cbbfac;
+  border-radius: 8px;
+  display: block;
+  max-width: 100%;
+  min-height: 96px;
+  object-fit: contain;
+  touch-action: none;
+  width: 100%;
+}
+
+.miniForm {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.miniForm input,
+.miniForm select {
+  background: #ffffff;
+  border: 1px solid #cbbfac;
+  border-radius: 6px;
+  color: #17201c;
+  font: inherit;
+  padding: 9px 10px;
+  width: 100%;
 }

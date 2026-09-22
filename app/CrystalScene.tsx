@@ -1,42 +1,28 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 
+import BrandLogo from "./BrandLogo";
 import Crystal from "./Crystal";
 import NetworkCloud from "./NetworkCloud";
+
+function HomeSceneContent() {
+  const { size } = useThree();
+  const isMobile = size.width < 720;
+
+  return (
+    <group position={[0, isMobile ? -1.15 : -2.5, 0]} scale={isMobile ? 0.72 : 1}>
+      <Crystal />
+      <NetworkCloud />
+    </group>
+  );
+}
 
 export default function CrystalScene() {
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          zIndex: 100,
-          color: "white",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "3.5rem",
-            marginBottom: "0.5rem",
-            letterSpacing: "0.1em",
-          }}
-        >
-          SHW DIGITAL SERVICES
-        </h1>
-
-        <p
-          style={{
-            color: "#D8B4FE",
-            fontSize: "1.25rem",
-          }}
-        >
-          Transform. Automate. Grow.
-        </p>
+      <div className="home-logo-panel">
+        <BrandLogo size="hero" />
       </div>
 
       <Canvas camera={{ position: [0, 0, 12] }}>
@@ -48,10 +34,7 @@ export default function CrystalScene() {
           color="#C084FC"
         />
 
-        <group position={[0, -2.5, 0]}>
-          <Crystal />
-          <NetworkCloud />
-        </group>
+        <HomeSceneContent />
       </Canvas>
     </>
   );

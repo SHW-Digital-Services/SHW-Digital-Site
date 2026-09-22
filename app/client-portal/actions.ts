@@ -14,6 +14,11 @@ function textValue(formData: FormData, key: string) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function redirectWithNotice(type: "success" | "error", message: string): never {
+  const params = new URLSearchParams({ notice: message, noticeType: type });
+  redirect(`/client-portal?${params.toString()}`);
+}
+
 export async function signInClient(_state: PortalActionState, formData: FormData): Promise<PortalActionState> {
   const email = textValue(formData, "email");
   const password = textValue(formData, "password");
@@ -54,6 +59,25 @@ export async function createClientAccount(_state: PortalActionState, formData: F
   return { ok: true, message: "Account created. Check your email if Supabase asks you to confirm the account, then sign in." };
 }
 
+export async function requestPasswordReset(_state: PortalActionState, formData: FormData): Promise<PortalActionState> {
+  const email = textValue(formData, "email");
+
+  if (!email) {
+    return { ok: false, message: "Email is required." };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "/client-portal",
+  });
+
+  if (error) {
+    return { ok: false, message: error.message };
+  }
+
+  return { ok: true, message: "Password reset email sent. Check your inbox for the secure reset link." };
+}
+
 export async function signOutClient() {
   const supabase = await createClient();
   await supabase.auth.signOut();
@@ -65,7 +89,7 @@ export async function sendClientMessage(formData: FormData) {
   const message = textValue(formData, "message");
 
   if (!subject || !message) {
-    throw new Error("Subject and message are required.");
+    redirectWithNotice("error", "Subject and message are required.");
   }
 
   const supabase = await createClient();
@@ -79,16 +103,18 @@ export async function sendClientMessage(formData: FormData) {
 
   const { error } = await supabase.from("client_messages").insert({
     client_email: user.email,
+    direction: "client_to_admin",
     message,
     subject,
     user_id: user.id,
   });
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
   }
 
   revalidatePath("/client-portal");
+  redirectWithNotice("success", "Message sent.");
 }
 
 export async function updateClientProfile(formData: FormData) {
@@ -101,7 +127,7 @@ export async function updateClientProfile(formData: FormData) {
     redirect("/client-portal");
   }
 
-  const { error } = await supabase.from("profiles").upsert({
+  const profilePayload: Record<string, string | boolean | null> = {
     address_line_1: textValue(formData, "addressLine1") || null,
     address_line_2: textValue(formData, "addressLine2") || null,
     business_name: textValue(formData, "businessName") || null,
@@ -111,12 +137,320 @@ export async function updateClientProfile(formData: FormData) {
     id: user.id,
     phone: textValue(formData, "phone") || null,
     postcode: textValue(formData, "postcode") || null,
+    notification_project_updates: formData.get("projectUpdates") === "on",
+    notification_billing: formData.get("billingEmails") === "on",
+    notification_marketing: formData.get("marketingEmails") === "on",
     updated_at: new Date().toISOString(),
-  });
+  };
+  const optionalProfileColumns = Object.keys(profilePayload).filter((column) => !["email", "id"].includes(column));
+
+  for (let attempt = 0; attempt <= optionalProfileColumns.length; attempt += 1) {
+    const { error } = await supabase.from("profiles").upsert(profilePayload);
+
+    if (!error) {
+      revalidatePath("/client-portal");
+      redirectWithNotice("success", "Contact information saved.");
+    }
+
+    const missingColumn = optionalProfileColumns.find((column) => error.message.toLowerCase().includes(column.toLowerCase()));
+
+    if (!missingColumn) {
+      redirectWithNotice("error", error.message);
+    }
+
+    delete profilePayload[missingColumn];
+  }
+
+  redirectWithNotice("error", "Profile could not be saved because the database schema is out of date.");
+}
+
+
+export async function signClientContract(formData: FormData) {
+  const contractId = Number(textValue(formData, "contractId"));
+  const signerName = textValue(formData, "signerName");
+  const signatureDataUrl = textValue(formData, "signatureDataUrl");
+
+  if (!Number.isFinite(contractId) || !signerName || !signatureDataUrl.startsWith("data:image/")) {
+    redirectWithNotice("error", "A valid contract, signer name, and signature are required.");
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    redirect("/client-portal");
+  }
+
+  const { data: contract, error: contractError } = await supabase.from("contracts").select("id, client_email").eq("id", contractId).maybeSingle();
+
+  if (contractError) {
+    redirectWithNotice("error", contractError.message);
+  }
+
+  if (!contract || contract.client_email?.toLowerCase() !== user.email.toLowerCase()) {
+    redirectWithNotice("error", "This contract is not available to this account.");
+  }
+
+  const { error } = await supabase.from("contract_signatures").upsert(
+    {
+      contract_id: contractId,
+      role: "client",
+      signature_data_url: signatureDataUrl,
+      signed_at: new Date().toISOString(),
+      signer_email: user.email,
+      signer_name: signerName,
+      user_id: user.id,
+    },
+    { onConflict: "contract_id,role" },
+  );
 
   if (error) {
-    throw new Error(error.message);
+    redirectWithNotice("error", error.message);
+  }
+
+  const { data: signatures } = await supabase.from("contract_signatures").select("role").eq("contract_id", contractId);
+  const roles = new Set((signatures ?? []).map((signature) => signature.role));
+
+  if (roles.has("client") && roles.has("shw")) {
+    await supabase.from("contracts").update({ status: "signed" }).eq("id", contractId);
   }
 
   revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "Contract signature saved.");
+}
+
+async function requirePortalUser() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user?.email) {
+    redirect("/client-portal");
+  }
+
+  return { email: user.email, supabase, user };
+}
+
+export async function createSupportTicket(formData: FormData) {
+  const subject = textValue(formData, "subject");
+  const details = textValue(formData, "details");
+  const priority = textValue(formData, "priority") || "normal";
+
+  if (!subject || !details) {
+    redirectWithNotice("error", "Subject and details are required.");
+  }
+
+  const { email, supabase, user } = await requirePortalUser();
+  const { error } = await supabase.from("support_tickets").insert({
+    client_email: email,
+    details,
+    priority,
+    status: "new",
+    subject,
+    user_id: user.id,
+  });
+
+  if (error) {
+    redirectWithNotice("error", error.message);
+  }
+
+  revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "Support ticket created.");
+}
+
+export async function requestTeamMemberAccess(formData: FormData) {
+  const colleagueName = textValue(formData, "colleagueName");
+  const colleagueEmail = textValue(formData, "colleagueEmail");
+  const requestedRole = textValue(formData, "requestedRole");
+
+  if (!colleagueName || !colleagueEmail || !requestedRole) {
+    redirectWithNotice("error", "Colleague name, email, and role are required.");
+  }
+
+  const { email, supabase, user } = await requirePortalUser();
+  const ticket = {
+    client_email: email,
+    details: `Please provision portal access for ${colleagueName} (${colleagueEmail}) with role: ${requestedRole}.`,
+    priority: "normal",
+    status: "new",
+    subject: "Team member access request",
+    user_id: user.id,
+  };
+
+  const { error } = await supabase.from("support_tickets").insert({
+    ...ticket,
+    ticket_type: "team_access",
+  });
+
+  if (error) {
+    const missingTicketType = error.message.toLowerCase().includes("ticket_type");
+
+    if (!missingTicketType) {
+      redirectWithNotice("error", error.message);
+    }
+
+    const { error: retryError } = await supabase.from("support_tickets").insert(ticket);
+
+    if (retryError) {
+      redirectWithNotice("error", retryError.message);
+    }
+  }
+
+  revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "Team access request sent.");
+}
+
+export async function addScopeComment(formData: FormData) {
+  const contractId = Number(textValue(formData, "contractId"));
+  const comment = textValue(formData, "comment");
+
+  if (!Number.isFinite(contractId) || !comment) {
+    redirectWithNotice("error", "A valid contract and comment are required.");
+  }
+
+  const { email, supabase, user } = await requirePortalUser();
+  const { error } = await supabase.from("scope_comments").insert({
+    client_email: email,
+    comment,
+    contract_id: contractId,
+    user_id: user.id,
+  });
+
+  if (error) {
+    redirectWithNotice("error", error.message);
+  }
+
+  revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "Scope comment added.");
+}
+
+export async function approveProjectScope(formData: FormData) {
+  const contractId = Number(textValue(formData, "contractId"));
+
+  if (!Number.isFinite(contractId)) {
+    redirectWithNotice("error", "A valid contract is required.");
+  }
+
+  const { email, supabase, user } = await requirePortalUser();
+  const { data: contract, error: contractError } = await supabase.from("contracts").select("id, client_email").eq("id", contractId).maybeSingle();
+
+  if (contractError) {
+    redirectWithNotice("error", contractError.message);
+  }
+
+  if (!contract || contract.client_email?.toLowerCase() !== email.toLowerCase()) {
+    redirectWithNotice("error", "This scope is not available to this account.");
+  }
+
+  const { error } = await supabase.from("scope_approvals").upsert(
+    {
+      approved_at: new Date().toISOString(),
+      client_email: email,
+      contract_id: contractId,
+      user_id: user.id,
+    },
+    { onConflict: "contract_id,user_id" },
+  );
+
+  if (error) {
+    redirectWithNotice("error", error.message);
+  }
+
+  revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "Project scope approved.");
+}
+
+function fileNamePart(value: string) {
+  return value
+    .trim()
+    .replace(/\.[^.]+$/, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "file";
+}
+
+function fileExtension(fileName: string) {
+  const extension = fileName.includes(".") ? fileName.split(".").pop() : "";
+  return fileNamePart(extension || "file").toLowerCase();
+}
+
+function compactDate(value: Date) {
+  const day = String(value.getDate()).padStart(2, "0");
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const year = String(value.getFullYear()).slice(-2);
+  return `${day}-${month}-${year}`;
+}
+
+export async function uploadClientFile(formData: FormData) {
+  const file = formData.get("file");
+  const contractId = Number(textValue(formData, "contractId"));
+  const note = textValue(formData, "note");
+
+  if (!Number.isFinite(contractId)) {
+    redirectWithNotice("error", "Choose the contract this file relates to.");
+  }
+
+  if (!(file instanceof File) || file.size === 0) {
+    redirectWithNotice("error", "Choose a file to upload.");
+  }
+
+  if (file.size > 8 * 1024 * 1024) {
+    redirectWithNotice("error", "Files must be 8MB or smaller.");
+  }
+
+  const { email, supabase, user } = await requirePortalUser();
+  const { data: contract, error: contractError } = await supabase
+    .from("contracts")
+    .select("id, client_email, client_name, service_type")
+    .eq("id", contractId)
+    .maybeSingle();
+
+  if (contractError) {
+    redirectWithNotice("error", contractError.message);
+  }
+
+  if (!contract || contract.client_email?.toLowerCase() !== email.toLowerCase()) {
+    redirectWithNotice("error", "This contract is not available to this account.");
+  }
+
+  const extension = fileExtension(file.name);
+  const displayFileName = [
+    fileNamePart(contract.client_name || email),
+    fileNamePart(contract.service_type),
+    fileNamePart(file.name),
+    compactDate(new Date()),
+    extension,
+  ].join(".");
+  const path = `${user.id}/${contract.id}/${Date.now()}-${displayFileName}`;
+  const { error: uploadError } = await supabase.storage.from("client-files").upload(path, file, { upsert: false });
+
+  if (uploadError) {
+    redirectWithNotice("error", uploadError.message);
+  }
+
+  const { error } = await supabase.from("client_files").insert({
+    client_email: email,
+    contract_id: contract.id,
+    file_name: displayFileName,
+    file_path: path,
+    file_size: file.size,
+    mime_type: file.type || "application/octet-stream",
+    note: note || null,
+    user_id: user.id,
+  });
+
+  if (error) {
+    redirectWithNotice("error", error.message);
+  }
+
+  revalidatePath("/client-portal");
+  revalidatePath("/admin");
+  redirectWithNotice("success", "File uploaded.");
 }

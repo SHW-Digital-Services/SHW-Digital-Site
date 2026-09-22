@@ -22,6 +22,7 @@ const nodes: PageNode[] = [
   { color: "#2563EB", position: [4.4, -3.7, 0.5], label: "Process", description: "A tailored approach", href: "/process", speed: 0.95 },
   { color: "#F97316", position: [-5.3, -2.3, -0.2], label: "Contact", description: "Start a conversation", href: "/contact", speed: 1.15 },
   { color: "#14B8A6", position: [0, -5.4, 0.2], label: "Client portal", description: "Contracts & payments", href: "/client-portal", speed: 1.0 },
+  { color: "#EAB308", position: [0.2, 4.85, 0.45], label: "Help Centre", description: "Client guidance", href: "/help-centre", speed: 0.9 },
 ];
 
 function EnergyPulse({ color, end, delay, speed }: { color: string; end: [number, number, number]; delay: number; speed: number }) {
@@ -66,5 +67,6 @@ export default function NetworkCloud() {
     </>
   );
 }
+
 
 
