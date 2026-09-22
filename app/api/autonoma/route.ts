@@ -6,30 +6,45 @@ import { createAutonomaSupabaseClient, throwIfError } from "@/lib/autonoma/supab
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const sharedSecret = process.env.AUTONOMA_SHARED_SECRET;
-if (!sharedSecret) throw new Error("AUTONOMA_SHARED_SECRET is required.");
+function createAutonomaHandler() {
+  const sharedSecret = process.env.AUTONOMA_SHARED_SECRET;
 
-const signingSecret = process.env.AUTONOMA_SIGNING_SECRET ?? createHmac("sha256", sharedSecret).update("shw-autonoma-refs-signing-v1").digest("hex");
+  if (!sharedSecret) {
+    return async () =>
+      Response.json(
+        { error: "AUTONOMA_SHARED_SECRET is required." },
+        { status: 503 },
+      );
+  }
 
-export const POST = createHandler({
-  scopeField: "testRunId",
-  sharedSecret,
-  signingSecret,
-  factories: autonomaFactories,
-  auth: async (_user, context) => {
-    const profile = context.refs.profiles?.[0];
-    if (!profile || typeof profile.email !== "string" || typeof profile.password !== "string") {
-      throw new Error("The recipe must create at least one profile with real login credentials.");
-    }
+  const signingSecret =
+    process.env.AUTONOMA_SIGNING_SECRET ??
+    createHmac("sha256", sharedSecret).update("shw-autonoma-refs-signing-v1").digest("hex");
 
-    const supabase = createAutonomaSupabaseClient();
-    const { data, error } = await supabase.auth.signInWithPassword({ email: profile.email, password: profile.password });
-    throwIfError(error, "verify seeded user login");
-    if (!data.session) throw new Error("Supabase did not return a session for the seeded user.");
+  return createHandler({
+    scopeField: "testRunId",
+    sharedSecret,
+    signingSecret,
+    factories: autonomaFactories,
+    auth: async (_user, context) => {
+      const profile = context.refs.profiles?.[0];
+      if (!profile || typeof profile.email !== "string" || typeof profile.password !== "string") {
+        throw new Error("The recipe must create at least one profile with real login credentials.");
+      }
 
-    return {
-      headers: { Authorization: `Bearer ${data.session.access_token}` },
-      credentials: { email: profile.email, password: profile.password },
-    };
-  },
-});
+      const supabase = createAutonomaSupabaseClient();
+      const { data, error } = await supabase.auth.signInWithPassword({ email: profile.email, password: profile.password });
+      throwIfError(error, "verify seeded user login");
+      if (!data.session) throw new Error("Supabase did not return a session for the seeded user.");
+
+      return {
+        headers: { Authorization: `Bearer ${data.session.access_token}` },
+        credentials: { email: profile.email, password: profile.password },
+      };
+    },
+  });
+}
+
+export async function POST(request: Request) {
+  return createAutonomaHandler()(request);
+}
